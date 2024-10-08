@@ -31,7 +31,7 @@ const NewsItem = styled.div`
   align-items: center;
   background: var(--secondary-background);
   border-radius: 12px;
-  border: 1px solid var(--accent-color);
+  border: 1px solid #121212;
   transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
