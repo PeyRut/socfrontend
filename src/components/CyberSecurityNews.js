@@ -38,10 +38,11 @@ const NewsTitle = styled.a`
   }
 `;
 
-const NewsDescription = styled.p`
-  font-size: 0.9em;
-  color: var(--role-text-color);
-`;
+// Removed NewsDescription since it is not used
+// const NewsDescription = styled.p`
+//   font-size: 0.9em;
+//   color: var(--role-text-color);
+// `;
 
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
