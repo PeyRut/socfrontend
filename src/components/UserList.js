@@ -53,7 +53,7 @@ const UserList = ({ onEdit }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/users', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +75,7 @@ const UserList = ({ onEdit }) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

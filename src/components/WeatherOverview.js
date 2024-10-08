@@ -124,7 +124,7 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/weather');
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/weather`);
         const dailyData = response.data.daily;
         const forecastData = dailyData.time.map((date, index) => ({
           date,

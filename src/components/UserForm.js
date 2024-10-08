@@ -97,7 +97,7 @@ const UserForm = ({ onClose, editingUser }) => {
           payload.password = password;
         }
 
-        await axios.put(`http://localhost:5000/api/users/${editingUser._id}`, payload, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/users/${editingUser._id}`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -115,7 +115,7 @@ const UserForm = ({ onClose, editingUser }) => {
           isAdmin,
         };
 
-        await axios.post('http://localhost:5000/api/users', payload, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/users`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
