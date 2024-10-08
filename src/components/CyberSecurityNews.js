@@ -1,54 +1,42 @@
-// src/components/CyberSecurityNews.js
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-const NEWS_WIDGET_HEIGHT = '606px';
-
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
-  border-radius: 16px;
+  border-radius: 8px;
   padding: 20px;
-  height: ${NEWS_WIDGET_HEIGHT};
+  height: 606px;
   overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: none;
 `;
 
 const NewsHeader = styled.h3`
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: var(--accent-color);
   text-align: center;
-  font-size: 1.5em;
-  font-weight: bold;
 `;
 
 const NewsItem = styled.div`
   margin-bottom: 15px;
-  padding: 10px;
-  background: var(--secondary-background);
-  border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    background: var(--hover-background);
-  }
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
-    color: var(--hover-accent);
   }
+`;
+
+const NewsDescription = styled.p`
+  font-size: 0.9em;
+  color: var(--role-text-color);
 `;
 
 const Spinner = styled.div`
@@ -73,8 +61,13 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
+      const API_KEY = process.env.REACT_APP_NEWSAPI_KEY; // Use environment variable
+      if (!API_KEY) {
+        throw new Error('API key is not defined');
+      }
+
       const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${process.env.REACT_APP_NEWSAPI_KEY}`
+        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`
       );
       setArticles(response.data.articles);
       setError(null);
@@ -88,7 +81,7 @@ const CyberSecurityNews = () => {
 
   useEffect(() => {
     fetchNews();
-    const interval = setInterval(fetchNews, 10 * 60 * 1000);
+    const interval = setInterval(fetchNews, 10 * 60 * 1000); // Update every 10 minutes
     return () => clearInterval(interval);
   }, []);
 
@@ -103,6 +96,7 @@ const CyberSecurityNews = () => {
           <NewsTitle href={article.url} target="_blank" rel="noopener noreferrer">
             {article.title}
           </NewsTitle>
+          <NewsDescription>{article.description}</NewsDescription>
         </NewsItem>
       ))}
     </NewsContainer>
