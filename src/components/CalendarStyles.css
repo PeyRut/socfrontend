@@ -1,0 +1,21 @@
+/* src/components/CalendarStyles.css */
+
+/* Ensure the calendar takes full width */
+.react-calendar {
+  width: 100%;
+}
+
+/* Adjust calendar tile styles to fit content */
+.react-calendar__tile {
+  max-height: none;
+  height: auto;
+  padding: 5px;
+}
+
+/* Adjust font size and wrapping for tile content */
+.react-calendar__tile div {
+  font-size: 0.9em;
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: center;
+}
