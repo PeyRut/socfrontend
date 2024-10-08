@@ -8,7 +8,7 @@ import axios from 'axios';
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px;
   height: 606px;
   overflow-y: auto;
@@ -25,25 +25,40 @@ const NewsHeader = styled.h3`
 `;
 
 const NewsItem = styled.div`
-  margin-bottom: 20px;
-  padding: 15px;
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
   background: var(--secondary-background);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 `;
 
+const NewsContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+`;
+
+const NewsImage = styled.img`
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 15px;
+`;
+
 const NewsTitle = styled.a`
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
-  display: block;
 
   &:hover {
     text-decoration: underline;
@@ -51,10 +66,10 @@ const NewsTitle = styled.a`
 `;
 
 const NewsDescription = styled.p`
-  font-size: 1em;
+  font-size: 0.85em;
   color: var(--text-muted-color);
-  margin-top: 10px;
-  line-height: 1.5;
+  margin-top: 5px;
+  line-height: 1.4;
 `;
 
 // Loading Spinner
@@ -105,10 +120,13 @@ const CyberSecurityNews = () => {
       {!loading && !error && articles.length === 0 && <p>No latest news available at the moment.</p>}
       {!loading && !error && articles.map((article, index) => (
         <NewsItem key={index}>
-          <NewsTitle href={article.url} target="_blank" rel="noopener noreferrer">
-            {article.title}
-          </NewsTitle>
-          {article.description && <NewsDescription>{article.description}</NewsDescription>}
+          {article.urlToImage && <NewsImage src={article.urlToImage} alt="News Thumbnail" />}
+          <NewsContent>
+            <NewsTitle href={article.url} target="_blank" rel="noopener noreferrer">
+              {article.title}
+            </NewsTitle>
+            {article.description && <NewsDescription>{article.description}</NewsDescription>}
+          </NewsContent>
         </NewsItem>
       ))}
     </NewsContainer>
