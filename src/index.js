@@ -10,9 +10,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-// Adding viewport meta tag to ensure consistent scaling across devices
-document.head.insertAdjacentHTML(
-  'beforeend',
-  '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">'
-);
