@@ -1,16 +1,15 @@
-// src/components/CyberSecurityNews.js
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Styled Components
+const NEWS_WIDGET_HEIGHT = '606px';
+
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 20px;
-  height: 606px;
+  height: ${NEWS_WIDGET_HEIGHT};
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: none;
@@ -20,47 +19,37 @@ const NewsHeader = styled.h3`
   margin-bottom: 15px;
   color: var(--accent-color);
   text-align: center;
-  font-size: 1.5em;
-  font-weight: bold;
 `;
 
 const NewsItem = styled.div`
-  margin-bottom: 15px;
-  padding: 15px;
   display: flex;
-  align-items: center;
-  background: var(--secondary-background);
-  border-radius: 12px;
-  border: 1px solid #121212;
-  transition: transform 0.3s, box-shadow 0.3s;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid #121212;
+  border-radius: 8px;
+`;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  }
+const NewsImage = styled.img`
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #121212;
+  margin-right: 10px;
 `;
 
 const NewsContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  flex: 1;
-`;
-
-const NewsImage = styled.img`
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-right: 15px;
-  border: 2px solid var(--accent-color);
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
+  margin-bottom: 5px;
 
   &:hover {
     text-decoration: underline;
@@ -69,12 +58,10 @@ const NewsTitle = styled.a`
 
 const NewsDescription = styled.p`
   font-size: 0.9em;
-  color: var(--text-muted-color);
-  margin-top: 5px;
-  line-height: 1.4;
+  color: var(--role-text-color);
+  margin: 0;
 `;
 
-// Loading Spinner
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
@@ -97,7 +84,7 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
+      const response = await axios.get('/api/news');
       setArticles(response.data.articles);
       setError(null);
     } catch (err) {
@@ -110,7 +97,7 @@ const CyberSecurityNews = () => {
 
   useEffect(() => {
     fetchNews();
-    const interval = setInterval(fetchNews, 10 * 60 * 1000); // Update every 10 minutes
+    const interval = setInterval(fetchNews, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -122,12 +109,12 @@ const CyberSecurityNews = () => {
       {!loading && !error && articles.length === 0 && <p>No latest news available at the moment.</p>}
       {!loading && !error && articles.map((article, index) => (
         <NewsItem key={index}>
-          {article.urlToImage && <NewsImage src={article.urlToImage} alt="News Thumbnail" />}
+          {article.urlToImage && <NewsImage src={article.urlToImage} alt="News" />}
           <NewsContent>
             <NewsTitle href={article.url} target="_blank" rel="noopener noreferrer">
               {article.title}
             </NewsTitle>
-            {article.description && <NewsDescription>{article.description}</NewsDescription>}
+            <NewsDescription>{article.description}</NewsDescription>
           </NewsContent>
         </NewsItem>
       ))}
