@@ -1,4 +1,4 @@
-// src/components/CyberSecurityNews.js
+// Updated CyberSecurityNews.js to use backend proxy for news
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
@@ -38,12 +38,6 @@ const NewsTitle = styled.a`
   }
 `;
 
-// Removed NewsDescription since it is not used
-// const NewsDescription = styled.p`
-//   font-size: 0.9em;
-//   color: var(--role-text-color);
-// `;
-
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
@@ -66,11 +60,7 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const API_KEY = process.env.REACT_APP_GUARDIAN_API_KEY; // Set this variable in your environment
-      const response = await axios.get(
-        `https://content.guardianapis.com/search?q=cybersecurity&api-key=${API_KEY}`
-      );
-
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
       setArticles(response.data.response.results);
       setError(null);
     } catch (err) {
