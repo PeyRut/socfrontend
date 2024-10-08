@@ -9,7 +9,6 @@ import RoleCard from './RoleCard';
 import WeatherOverview from './WeatherOverview';
 import CyberSecurityNews from './CyberSecurityNews';
 import Footer from './Footer';
-import PTOForm from './PTOForm';
 
 // Styled Components
 
@@ -70,10 +69,6 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
-const PTOButtonContainer = styled.div`
-  margin-bottom: 20px;
-`;
-
 const Dashboard = () => {
   // Rotation logic matching the Python script
   const getRotation = (week) => {
@@ -109,9 +104,6 @@ const Dashboard = () => {
     <DashboardContainer>
       <Navbar />
       <Header />
-      <PTOButtonContainer>
-        <PTOForm />
-      </PTOButtonContainer>
       <MainContent>
         <LeftSection>
           <RolesSection>
