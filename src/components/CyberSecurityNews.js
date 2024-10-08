@@ -1,7 +1,10 @@
+// src/components/CyberSecurityNews.js
+
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
+// Styled Components
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
@@ -17,43 +20,38 @@ const NewsHeader = styled.h3`
   margin-bottom: 15px;
   color: var(--accent-color);
   text-align: center;
-  font-size: 1.5em;
-  font-weight: bold;
 `;
 
 const NewsItem = styled.div`
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 15px;
+  padding: 10px;
+  background: var(--secondary-background);
+  border-radius: 6px;
+  transition: background 0.3s;
+
+  &:hover {
+    background: var(--hover-background);
+  }
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1.2em;
+  font-size: 1.1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
-  transition: color 0.3s ease;
 
   &:hover {
-    color: var(--hover-accent);
     text-decoration: underline;
   }
 `;
 
 const NewsDescription = styled.p`
-  font-size: 1em;
-  color: var(--role-text-color);
-  margin-top: 10px;
-`;
-
-const NewsSource = styled.span`
-  display: block;
   font-size: 0.9em;
-  color: var(--text-color-secondary);
+  color: var(--text-color);
   margin-top: 5px;
-  font-style: italic;
 `;
 
+// Loading Spinner
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
@@ -76,7 +74,7 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await axios.get('/api/news');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
       setArticles(response.data.articles);
       setError(null);
     } catch (err) {
@@ -105,7 +103,6 @@ const CyberSecurityNews = () => {
             {article.title}
           </NewsTitle>
           <NewsDescription>{article.description}</NewsDescription>
-          <NewsSource>Source: {article.source.name}</NewsSource>
         </NewsItem>
       ))}
     </NewsContainer>
