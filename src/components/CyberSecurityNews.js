@@ -4,16 +4,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// **Define a variable for easy height adjustment**
-const NEWS_WIDGET_HEIGHT = '606px'; // <-- You can change this value to adjust the widget height
+const NEWS_WIDGET_HEIGHT = '606px';
 
-// Styled Components
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
   border-radius: 8px;
   padding: 20px;
-  height: ${NEWS_WIDGET_HEIGHT}; /* Set height using the variable */
+  height: ${NEWS_WIDGET_HEIGHT};
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: none;
@@ -45,7 +43,6 @@ const NewsDescription = styled.p`
   color: var(--role-text-color);
 `;
 
-// Loading Spinner
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
@@ -68,25 +65,16 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Ensure this is set in Netlify or your environment
+      const API_KEY = process.env.REACT_APP_GUARDIAN_API_KEY; // Set this variable in your environment
       const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`,
-        {
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          },
-        }
+        `https://content.guardianapis.com/search?q=cybersecurity&api-key=${API_KEY}`
       );
-      setArticles(response.data.articles);
+
+      setArticles(response.data.response.results);
       setError(null);
     } catch (err) {
       console.error('Error fetching cybersecurity news:', err);
-      if (err.response) {
-        setError(`Failed to fetch news: ${err.response.status} - ${err.response.statusText}`);
-      } else {
-        setError('Failed to fetch news. Please try again later.');
-      }
+      setError('Failed to fetch news. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -106,10 +94,9 @@ const CyberSecurityNews = () => {
       {!loading && !error && articles.length === 0 && <p>No latest news available at the moment.</p>}
       {!loading && !error && articles.map((article, index) => (
         <NewsItem key={index}>
-          <NewsTitle href={article.url} target="_blank" rel="noopener noreferrer">
-            {article.title}
+          <NewsTitle href={article.webUrl} target="_blank" rel="noopener noreferrer">
+            {article.webTitle}
           </NewsTitle>
-          <NewsDescription>{article.description}</NewsDescription>
         </NewsItem>
       ))}
     </NewsContainer>
