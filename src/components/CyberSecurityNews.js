@@ -1,7 +1,10 @@
+// src/components/CyberSecurityNews.js
+
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
+// Styled Components
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
@@ -21,10 +24,18 @@ const NewsHeader = styled.h3`
 
 const NewsItem = styled.div`
   margin-bottom: 15px;
+  padding: 10px;
+  background: var(--secondary-background);
+  border-radius: 6px;
+  transition: background 0.3s;
+
+  &:hover {
+    background: var(--hover-background);
+  }
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
@@ -36,9 +47,11 @@ const NewsTitle = styled.a`
 
 const NewsDescription = styled.p`
   font-size: 0.9em;
-  color: var(--role-text-color);
+  color: var(--text-color);
+  margin-top: 5px;
 `;
 
+// Loading Spinner
 const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
@@ -61,14 +74,7 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const API_KEY = process.env.REACT_APP_NEWSAPI_KEY; // Use environment variable
-      if (!API_KEY) {
-        throw new Error('API key is not defined');
-      }
-
-      const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`
-      );
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
       setArticles(response.data.articles);
       setError(null);
     } catch (err) {
