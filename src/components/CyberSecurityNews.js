@@ -1,41 +1,62 @@
-// Updated CyberSecurityNews.js to use backend proxy for news
+// src/components/CyberSecurityNews.js
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-const NEWS_WIDGET_HEIGHT = '606px';
+// **Define a variable for easy height adjustment**
+const NEWS_WIDGET_HEIGHT = '606px'; // <-- You can change this value to adjust the widget height
 
+// Styled Components
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 20px;
-  height: ${NEWS_WIDGET_HEIGHT};
+  height: ${NEWS_WIDGET_HEIGHT}; /* Set height using the variable */
   overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border: none;
 `;
 
 const NewsHeader = styled.h3`
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: var(--accent-color);
   text-align: center;
+  font-size: 1.5em; /* Increased header font size */
+  font-weight: bold; /* Added bold font */
 `;
 
 const NewsItem = styled.div`
   margin-bottom: 15px;
+  padding: 10px;
+  background: var(--secondary-background);
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    background: var(--hover-background); /* Lighter background on hover */
+  }
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1em;
+  font-size: 1.1em; /* Slightly larger font size */
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
+    color: var(--hover-accent);
   }
+`;
+
+const NewsDescription = styled.p`
+  font-size: 0.9em; /* Regular font size for description */
+  color: var(--role-text-color);
+  margin-top: 8px;
 `;
 
 const Spinner = styled.div`
