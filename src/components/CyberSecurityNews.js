@@ -4,16 +4,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// **Define a variable for easy height adjustment**
-const NEWS_WIDGET_HEIGHT = '606px'; // <-- You can change this value to adjust the widget height
+const NEWS_WIDGET_HEIGHT = '606px';
 
-// Styled Components
 const NewsContainer = styled.div`
   background: var(--card-background);
   color: var(--text-color);
   border-radius: 16px;
   padding: 20px;
-  height: ${NEWS_WIDGET_HEIGHT}; /* Set height using the variable */
+  height: ${NEWS_WIDGET_HEIGHT};
   overflow-y: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border: none;
@@ -23,8 +21,8 @@ const NewsHeader = styled.h3`
   margin-bottom: 20px;
   color: var(--accent-color);
   text-align: center;
-  font-size: 1.5em; /* Increased header font size */
-  font-weight: bold; /* Added bold font */
+  font-size: 1.5em;
+  font-weight: bold;
 `;
 
 const NewsItem = styled.div`
@@ -37,12 +35,12 @@ const NewsItem = styled.div`
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    background: var(--hover-background); /* Lighter background on hover */
+    background: var(--hover-background);
   }
 `;
 
 const NewsTitle = styled.a`
-  font-size: 1.1em; /* Slightly larger font size */
+  font-size: 1.1em;
   font-weight: bold;
   color: var(--accent-color);
   text-decoration: none;
@@ -51,12 +49,6 @@ const NewsTitle = styled.a`
     text-decoration: underline;
     color: var(--hover-accent);
   }
-`;
-
-const NewsDescription = styled.p`
-  font-size: 0.9em; /* Regular font size for description */
-  color: var(--role-text-color);
-  margin-top: 8px;
 `;
 
 const Spinner = styled.div`
@@ -94,7 +86,7 @@ const CyberSecurityNews = () => {
 
   useEffect(() => {
     fetchNews();
-    const interval = setInterval(fetchNews, 10 * 60 * 1000); // Update every 10 minutes
+    const interval = setInterval(fetchNews, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
