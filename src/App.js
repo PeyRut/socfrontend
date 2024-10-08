@@ -8,20 +8,35 @@ import CalendarView from './components/CalendarView';
 import Login from './components/Login';
 import AdminPanel from './components/AdminPanel';
 import ActivateAccount from './components/ActivateAccount';
-import { jwtDecode } from 'jwt-decode'; // Corrected import
+import { jwtDecode } from 'jwt-decode';
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --background-color: #121212; /* Deep Black */
-    --secondary-background: #1e1e1e; /* Dark Gray */
-    --card-background: #1e1e1e; /* Dark Gray for Cards */
-    --text-color: #e0e0e0; /* Light Gray Text */
-    --accent-color: #bb86fc; /* Soft Purple */
-    --hover-accent: #9a67ea; /* Darker Purple */
-    --holiday-background: #e74c3c; /* Red for Holidays */
-    --button-background: #bb86fc; /* Soft Purple */
-    --button-text-color: #121212; /* Black Text on Buttons */
-    --role-text-color: #7f8c8d; /* Muted Gray for Roles */
+    --background-color: #121212;
+    --secondary-background: #1e1e1e;
+    --card-background: #1e1e1e;
+    --text-color: #e0e0e0;
+    --accent-color: #bb86fc;
+    --hover-accent: #9a67ea;
+    --holiday-background: #e74c3c;
+    --button-background: #bb86fc;
+    --button-text-color: #121212;
+    --role-text-color: #7f8c8d;
+
+    --base-font-size: 16px;
+    --font-size-small: calc(var(--base-font-size) * 0.875);
+    --font-size-medium: var(--base-font-size);
+    --font-size-large: calc(var(--base-font-size) * 1.25);
+  }
+
+  html {
+    font-size: 100%; /* Default 16px */
+    @media (min-width: 1200px) {
+      font-size: 125%; /* Increase font size on larger screens */
+    }
+    @media (max-width: 768px) {
+      font-size: 90%; /* Decrease font size on smaller screens */
+    }
   }
 
   body {
@@ -63,7 +78,7 @@ function App() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const decoded = jwtDecode(token); // Use jwtDecode function
+      const decoded = jwtDecode(token);
       setIsAuthenticated(true);
       setIsAdmin(decoded.isAdmin || false);
     } catch (err) {
