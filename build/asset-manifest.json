@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/PeyRut/socdashboard.git/static/css/main.77336bcd.css",
+    "main.js": "/PeyRut/socdashboard.git/static/js/main.505df2ea.js",
+    "static/media/logo.png": "/PeyRut/socdashboard.git/static/media/logo.204d255ecccaf9849512.png",
+    "index.html": "/PeyRut/socdashboard.git/index.html",
+    "main.77336bcd.css.map": "/PeyRut/socdashboard.git/static/css/main.77336bcd.css.map",
+    "main.505df2ea.js.map": "/PeyRut/socdashboard.git/static/js/main.505df2ea.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.77336bcd.css",
+    "static/js/main.505df2ea.js"
+  ]
+}
