@@ -10,57 +10,67 @@ import WeatherOverview from './WeatherOverview';
 import CyberSecurityNews from './CyberSecurityNews';
 import Footer from './Footer';
 
+// Styled Components
+
+// Container for the entire dashboard
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 `;
 
+// Main content area with Flexbox layout
 const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: row;
-  padding: 2vw; /* Adjust padding using relative units */
+  padding: 20px; /* Add padding as needed */
   box-sizing: border-box;
   width: 100%;
-  align-items: stretch;
-
-  @media (max-width: 768px) {
-    flex-direction: column; /* Stack sections vertically on smaller screens */
-  }
+  align-items: stretch; /* Ensure children stretch to match height */
 `;
 
+// Left section for SOC Roles and Weather Forecast
 const LeftSection = styled.div`
   flex: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2vw; /* Adjust gap using relative units */
+  align-items: center; /* Center content horizontally */
+  gap: 20px;
   width: 100%;
 `;
 
+// Right section for the News widget
 const RightSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  padding: 0;
-  margin-left: 2vw;
+  align-items: stretch; /* Stretch to fill the container */
+  padding: 0; /* Remove padding to align flush against the right edge */
+  margin-left: 20px; /* Space between LeftSection and RightSection */
+
+  /* Remove the border-left to eliminate the white border */
+  border-left: none;
+
+  /* Ensure the News widget matches the height of the Weather Forecast */
+  height: 100%; /* Fill the available height */
 
   @media (max-width: 1200px) {
-    display: none;
+    display: none; /* Hide on smaller screens or adjust as needed */
   }
 `;
 
+// Roles Section styled component
 const RolesSection = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2vw;
+  gap: 20px;
   width: 100%;
 `;
 
 const Dashboard = () => {
+  // Rotation logic matching the Python script
   const getRotation = (week) => {
     const rotations = [
       ["Willis", "Jordan", "Randy", "Peyton"],
@@ -77,10 +87,12 @@ const Dashboard = () => {
     };
   };
 
+  // Get current week number
   const currentDate = moment();
   const currentWeekNumber = currentDate.isoWeek();
   const rotation = getRotation(currentWeekNumber);
 
+  // Create role assignments
   const roleAssignments = [
     { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
     { role: "Threat Hunter Manager", employee: rotation["Threat Hunter Manager"] },
@@ -106,7 +118,7 @@ const Dashboard = () => {
           <WeatherOverview />
         </LeftSection>
         <RightSection>
-          <CyberSecurityNews />
+          <CyberSecurityNews /> {/* Add the news widget here */}
         </RightSection>
       </MainContent>
       <Footer />
