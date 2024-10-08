@@ -68,12 +68,13 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Ensure this is set in Netlify
+      const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Ensure this is set in Netlify or your environment
       const response = await axios.get(
         `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`,
         {
           headers: {
             'Accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
           },
         }
       );
@@ -81,7 +82,11 @@ const CyberSecurityNews = () => {
       setError(null);
     } catch (err) {
       console.error('Error fetching cybersecurity news:', err);
-      setError('Failed to fetch news. Please try again later.');
+      if (err.response) {
+        setError(`Failed to fetch news: ${err.response.status} - ${err.response.statusText}`);
+      } else {
+        setError('Failed to fetch news. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
