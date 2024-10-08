@@ -70,10 +70,6 @@ const RolesSection = styled.section`
 `;
 
 const Dashboard = () => {
-  // Employee and role data
-  const employees = ["Willis", "Jordan", "Randy", "Peyton"];
-  const roles = ["Threat Hunter", "Threat Hunter Manager", "On-Call (Tech Desk)", "Standby (Off Thurs-Fri)"];
-
   // Rotation logic matching the Python script
   const getRotation = (week) => {
     const rotations = [
@@ -97,10 +93,12 @@ const Dashboard = () => {
   const rotation = getRotation(currentWeekNumber);
 
   // Create role assignments
-  const roleAssignments = roles.map(role => ({
-    role: role,
-    employee: rotation[role]
-  }));
+  const roleAssignments = [
+    { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
+    { role: "Threat Hunter Manager", employee: rotation["Threat Hunter Manager"] },
+    { role: "On-Call (Tech Desk)", employee: rotation["On-Call (Tech Desk)"] },
+    { role: "Standby (Off Thurs-Fri)", employee: rotation["Standby (Off Thurs-Fri)"] }
+  ];
 
   return (
     <DashboardContainer>

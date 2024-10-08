@@ -114,10 +114,6 @@ const CalendarView = () => {
     "12-31": "New Year's Eve"
   };
 
-  // Rotation logic matching the Python script
-  const employees = ["Willis", "Jordan", "Randy", "Peyton"];
-  const roles = ["Threat Hunter", "Threat Hunter Manager", "On-Call (Tech Desk)", "Standby (Off Thurs-Fri)"];
-
   const getRotation = (week) => {
     const rotations = [
       ["Willis", "Jordan", "Randy", "Peyton"],
@@ -136,7 +132,6 @@ const CalendarView = () => {
 
   const generateCalendar = () => {
     const startOfMonth = currentMonth.clone().startOf('month');
-    const endOfMonth = currentMonth.clone().endOf('month');
     const startDay = startOfMonth.day(); // 0 (Sunday) - 6 (Saturday)
     const totalDays = currentMonth.daysInMonth();
 
@@ -199,12 +194,11 @@ const CalendarView = () => {
               const weekNumber = date.isoWeek();
               const dateKey = date.format('MM-DD');
               const holiday = company_holidays[dateKey];
-              const isHoliday = Boolean(holiday);
               const rotation = getRotation(weekNumber);
 
               return (
                 <DateCell key={`${weekIndex}-${dayIndex}`}>
-                  <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{day}</div> {/* Increased day number size */}
+                  <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{day}</div>
                   {/* Display roles */}
                   <RoleList>
                     {Object.entries(rotation).map(([role, employee], idx) => (
