@@ -24,16 +24,10 @@ const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: row;
-  padding: 2vw;
+  padding: 20px; /* Add padding as needed */
   box-sizing: border-box;
   width: 100%;
-  align-items: stretch;
-  gap: 2vw;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 4vw;
-  }
+  align-items: stretch; /* Ensure children stretch to match height */
 `;
 
 // Left section for SOC Roles and Weather Forecast
@@ -41,26 +35,28 @@ const LeftSection = styled.div`
   flex: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2vw;
+  align-items: center; /* Center content horizontally */
+  gap: 20px;
   width: 100%;
-
-  @media (max-width: 768px) {
-    flex: 1;
-  }
 `;
 
 // Right section for the News widget
 const RightSection = styled.div`
-  flex: 1.5;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  height: 100%;
-  
-  @media (max-width: 768px) {
-    flex: 1;
-    margin-top: 2vw;
+  align-items: stretch; /* Stretch to fill the container */
+  padding: 0; /* Remove padding to align flush against the right edge */
+  margin-left: 20px; /* Space between LeftSection and RightSection */
+
+  /* Remove the border-left to eliminate the white border */
+  border-left: none;
+
+  /* Ensure the News widget matches the height of the Weather Forecast */
+  height: 100%; /* Fill the available height */
+
+  @media (max-width: 1200px) {
+    display: none; /* Hide on smaller screens or adjust as needed */
   }
 `;
 
@@ -69,15 +65,7 @@ const RolesSection = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2vw;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    gap: 4vw;
-  }
-`;
-
-const WeatherSection = styled.section`
+  gap: 20px;
   width: 100%;
 `;
 
@@ -127,12 +115,10 @@ const Dashboard = () => {
               />
             ))}
           </RolesSection>
-          <WeatherSection>
-            <WeatherOverview />
-          </WeatherSection>
+          <WeatherOverview />
         </LeftSection>
         <RightSection>
-          <CyberSecurityNews />
+          <CyberSecurityNews /> {/* Add the news widget here */}
         </RightSection>
       </MainContent>
       <Footer />
