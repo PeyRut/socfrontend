@@ -24,10 +24,16 @@ const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: row;
-  padding: 20px; /* Add padding as needed */
+  padding: 2vw;
   box-sizing: border-box;
   width: 100%;
-  align-items: stretch; /* Ensure children stretch to match height */
+  align-items: stretch;
+  gap: 2vw;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 4vw;
+  }
 `;
 
 // Left section for SOC Roles and Weather Forecast
@@ -35,28 +41,26 @@ const LeftSection = styled.div`
   flex: 3;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content horizontally */
-  gap: 20px;
+  align-items: center;
+  gap: 2vw;
   width: 100%;
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
 `;
 
 // Right section for the News widget
 const RightSection = styled.div`
-  flex: 1;
+  flex: 1.5;
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* Stretch to fill the container */
-  padding: 0; /* Remove padding to align flush against the right edge */
-  margin-left: 20px; /* Space between LeftSection and RightSection */
-
-  /* Remove the border-left to eliminate the white border */
-  border-left: none;
-
-  /* Ensure the News widget matches the height of the Weather Forecast */
-  height: 100%; /* Fill the available height */
-
-  @media (max-width: 1200px) {
-    display: none; /* Hide on smaller screens or adjust as needed */
+  align-items: stretch;
+  height: 100%;
+  
+  @media (max-width: 768px) {
+    flex: 1;
+    margin-top: 2vw;
   }
 `;
 
@@ -65,7 +69,15 @@ const RolesSection = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 2vw;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    gap: 4vw;
+  }
+`;
+
+const WeatherSection = styled.section`
   width: 100%;
 `;
 
@@ -115,10 +127,12 @@ const Dashboard = () => {
               />
             ))}
           </RolesSection>
-          <WeatherOverview />
+          <WeatherSection>
+            <WeatherOverview />
+          </WeatherSection>
         </LeftSection>
         <RightSection>
-          <CyberSecurityNews /> {/* Add the news widget here */}
+          <CyberSecurityNews />
         </RightSection>
       </MainContent>
       <Footer />
