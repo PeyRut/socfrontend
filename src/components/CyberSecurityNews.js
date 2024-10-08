@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-// Define a variable for easy height adjustment
-const NEWS_WIDGET_HEIGHT = '606px'; 
+// **Define a variable for easy height adjustment**
+const NEWS_WIDGET_HEIGHT = '606px'; // <-- You can change this value to adjust the widget height
 
 // Styled Components
 const NewsContainer = styled.div`
@@ -13,7 +13,7 @@ const NewsContainer = styled.div`
   color: var(--text-color);
   border-radius: 8px;
   padding: 20px;
-  height: ${NEWS_WIDGET_HEIGHT};
+  height: ${NEWS_WIDGET_HEIGHT}; /* Set height using the variable */
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: none;
@@ -68,9 +68,14 @@ const CyberSecurityNews = () => {
 
   const fetchNews = async () => {
     try {
-      const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Make sure this key is set in your environment
+      const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Ensure this is set in Netlify
       const response = await axios.get(
-        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`
+        `https://newsapi.org/v2/everything?q=cybersecurity&sortBy=publishedAt&language=en&pageSize=10&apiKey=${API_KEY}`,
+        {
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
       );
       setArticles(response.data.articles);
       setError(null);
