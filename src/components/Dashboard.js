@@ -1,6 +1,6 @@
 // src/components/Dashboard.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import Navbar from './Navbar';
@@ -9,6 +9,7 @@ import RoleCard from './RoleCard';
 import WeatherOverview from './WeatherOverview';
 import CyberSecurityNews from './CyberSecurityNews';
 import Footer from './Footer';
+import PTOForm from './PTOForm';
 
 // Styled Components
 
@@ -69,7 +70,24 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
+const PTOButton = styled.button`
+  width: 200px;
+  padding: 10px;
+  background: var(--accent-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 20px auto;
+
+  &:hover {
+    background: var(--hover-accent);
+  }
+`;
+
 const Dashboard = () => {
+  const [showPTOForm, setShowPTOForm] = useState(false);
+
   // Rotation logic matching the Python script
   const getRotation = (week) => {
     const rotations = [
@@ -114,6 +132,10 @@ const Dashboard = () => {
                 employee={assignment.employee}
               />
             ))}
+            <PTOButton onClick={() => setShowPTOForm(!showPTOForm)}>
+              {showPTOForm ? 'Close PTO Form' : 'Request PTO'}
+            </PTOButton>
+            {showPTOForm && <PTOForm />}
           </RolesSection>
           <WeatherOverview />
         </LeftSection>
