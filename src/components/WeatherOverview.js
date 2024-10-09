@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import ReactAnimatedWeather from 'react-animated-weather';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -92,34 +92,52 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Mapping weather codes from Open-Meteo to ReactAnimatedWeather icons
+// Mapping weather codes from Open-Meteo to Lottie animation URLs
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: 'CLEAR_DAY' },
-  1: { description: 'Mainly clear', icon: 'CLEAR_DAY' },
-  2: { description: 'Partly cloudy', icon: 'PARTLY_CLOUDY_DAY' },
-  3: { description: 'Overcast', icon: 'CLOUDY' },
-  45: { description: 'Fog', icon: 'FOG' },
-  48: { description: 'Depositing rime fog', icon: 'FOG' },
-  51: { description: 'Light drizzle', icon: 'RAIN' },
-  53: { description: 'Moderate drizzle', icon: 'RAIN' },
-  55: { description: 'Dense drizzle', icon: 'RAIN' },
-  56: { description: 'Light freezing drizzle', icon: 'SLEET' },
-  57: { description: 'Dense freezing drizzle', icon: 'SLEET' },
-  61: { description: 'Slight rain', icon: 'RAIN' },
-  63: { description: 'Moderate rain', icon: 'RAIN' },
-  65: { description: 'Heavy rain', icon: 'RAIN' },
-  66: { description: 'Light freezing rain', icon: 'SLEET' },
-  67: { description: 'Heavy freezing rain', icon: 'SLEET' },
-  71: { description: 'Slight snow fall', icon: 'SNOW' },
-  73: { description: 'Moderate snow fall', icon: 'SNOW' },
-  75: { description: 'Heavy snow fall', icon: 'SNOW' },
-  77: { description: 'Snow grains', icon: 'SNOW' },
-  80: { description: 'Rain showers', icon: 'RAIN' },
-  85: { description: 'Slight snow showers', icon: 'SNOW' },
-  86: { description: 'Heavy snow showers', icon: 'SNOW' },
-  95: { description: 'Thunderstorm', icon: 'WIND' },
-  96: { description: 'Thunderstorm with slight hail', icon: 'WIND' },
-  99: { description: 'Thunderstorm with heavy hail', icon: 'WIND' },
+  0: {
+    description: 'Clear sky',
+    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
+  },
+  1: {
+    description: 'Mainly clear',
+    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
+  },
+  2: {
+    description: 'Partly cloudy',
+    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_8lg6m6.json',
+  },
+  3: {
+    description: 'Overcast',
+    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_dgjue3xo.json',
+  },
+  45: {
+    description: 'Fog',
+    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_foggy.json',
+  },
+  48: {
+    description: 'Depositing rime fog',
+    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_foggy.json',
+  },
+  51: {
+    description: 'Light drizzle',
+    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
+  },
+  61: {
+    description: 'Slight rain',
+    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
+  },
+  71: {
+    description: 'Slight snow fall',
+    animationUrl: 'https://assets1.lottiefiles.com/packages/lf20_snowy.json',
+  },
+  80: {
+    description: 'Rain showers',
+    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
+  },
+  95: {
+    description: 'Thunderstorm',
+    animationUrl: 'https://assets8.lottiefiles.com/packages/lf20_stormy.json',
+  },
 };
 
 const WeatherOverview = () => {
@@ -210,18 +228,19 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            icon: 'CLEAR_DAY',
+            animationUrl:
+              'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
           };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <ReactAnimatedWeather
-                  icon={weatherInfo.icon}
-                  color="#f39c12"
-                  size={64}
-                  animate={true}
+                <Player
+                  autoplay
+                  loop
+                  src={weatherInfo.animationUrl}
+                  style={{ height: '100px', width: '100px' }}
                 />
               </WeatherIconContainer>
               <Temperature>
