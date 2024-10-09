@@ -4,7 +4,15 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import WeatherIcon from 'react-icons-weather';
+import {
+  WiDaySunny,
+  WiCloud,
+  WiRain,
+  WiThunderstorm,
+  WiSnow,
+  WiFog,
+  WiDayCloudy,
+} from 'react-icons/wi';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -46,6 +54,7 @@ const ForecastCard = styled.div`
 
 const WeatherIconContainer = styled.div`
   margin-bottom: 10px;
+  font-size: 3em; /* Adjust icon size here */
 `;
 
 const Day = styled.div`
@@ -91,6 +100,32 @@ const Spinner = styled.div`
   animation: ${spin} 2s linear infinite;
   margin: 0 auto;
 `;
+
+// Weather code to icon mapping
+const weatherIconMap = {
+  0: { description: 'Clear sky', icon: <WiDaySunny /> },
+  1: { description: 'Mainly clear', icon: <WiDaySunny /> },
+  2: { description: 'Partly cloudy', icon: <WiDayCloudy /> },
+  3: { description: 'Overcast', icon: <WiCloud /> },
+  45: { description: 'Fog', icon: <WiFog /> },
+  48: { description: 'Depositing rime fog', icon: <WiFog /> },
+  51: { description: 'Light drizzle', icon: <WiRain /> },
+  53: { description: 'Moderate drizzle', icon: <WiRain /> },
+  55: { description: 'Dense drizzle', icon: <WiRain /> },
+  61: { description: 'Slight rain', icon: <WiRain /> },
+  63: { description: 'Moderate rain', icon: <WiRain /> },
+  65: { description: 'Heavy rain', icon: <WiRain /> },
+  71: { description: 'Slight snow fall', icon: <WiSnow /> },
+  73: { description: 'Moderate snow fall', icon: <WiSnow /> },
+  75: { description: 'Heavy snow fall', icon: <WiSnow /> },
+  77: { description: 'Snow grains', icon: <WiSnow /> },
+  80: { description: 'Rain showers', icon: <WiRain /> },
+  85: { description: 'Slight snow showers', icon: <WiSnow /> },
+  86: { description: 'Heavy snow showers', icon: <WiSnow /> },
+  95: { description: 'Thunderstorm', icon: <WiThunderstorm /> },
+  96: { description: 'Thunderstorm with slight hail', icon: <WiThunderstorm /> },
+  99: { description: 'Thunderstorm with heavy hail', icon: <WiThunderstorm /> },
+};
 
 const WeatherOverview = () => {
   const [forecast, setForecast] = useState([]);
@@ -178,18 +213,15 @@ const WeatherOverview = () => {
         {forecast.map((day, index) => {
           if (!day) return null;
           const date = moment(day.date);
+          const weatherInfo = weatherIconMap[day.weatherCode] || {
+            description: 'Unknown',
+            icon: <WiDaySunny />,
+          };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
-              <WeatherIconContainer>
-                <WeatherIcon
-                  name="owm" // Using OpenWeatherMap icon set
-                  iconId={day.weatherCode} // Use the code from the weather API
-                  size="64"
-                  animate={true} // Enables animation
-                />
-              </WeatherIconContainer>
+              <WeatherIconContainer>{weatherInfo.icon}</WeatherIconContainer>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
@@ -203,7 +235,7 @@ const WeatherOverview = () => {
               <WindSpeed>
                 Wind Speed: {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
               </WindSpeed>
-              <Description>Weather Code: {day.weatherCode}</Description>
+              <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
         })}
