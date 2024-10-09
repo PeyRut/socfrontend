@@ -131,15 +131,37 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/weather`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/weather`, {
+          params: {
+            latitude: 33.1032,
+            longitude: -96.6706,
+            daily: [
+              'temperature_2m_max',
+              'temperature_2m_min',
+              'weathercode',
+              'precipitation_probability_max',
+              'windspeed_10m_max',
+            ],
+            timezone: 'America/Chicago',
+          },
+        });
+        console.log('API Response:', response.data); // For debugging
+
         const dailyData = response.data.daily;
+
+        if (!dailyData || !dailyData.time) {
+          throw new Error('Invalid daily data structure in API response.');
+        }
+
         const forecastData = dailyData.time.map((date, index) => ({
           date,
-          maxTemp: dailyData.temperature_2m_max[index],
-          minTemp: dailyData.temperature_2m_min[index],
-          weatherCode: dailyData.weathercode[index],
-          precipitationProbability: dailyData.precipitation_probability_max[index],
-          windSpeed: dailyData.windspeed_10m_max[index], // Add wind speed data here
+          maxTemp: dailyData.temperature_2m_max ? dailyData.temperature_2m_max[index] : null,
+          minTemp: dailyData.temperature_2m_min ? dailyData.temperature_2m_min[index] : null,
+          weatherCode: dailyData.weathercode ? dailyData.weathercode[index] : null,
+          precipitationProbability: dailyData.precipitation_probability_max
+            ? dailyData.precipitation_probability_max[index]
+            : null,
+          windSpeed: dailyData.windspeed_10m_max ? dailyData.windspeed_10m_max[index] : null,
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -176,6 +198,7 @@ const WeatherOverview = () => {
       <OverviewHeader>7-Day Weather Forecast for Allen, TX</OverviewHeader>
       <ForecastGrid>
         {forecast.map((day, index) => {
+          if (!day) return null;
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
@@ -193,14 +216,15 @@ const WeatherOverview = () => {
                 />
               </WeatherIcon>
               <Temperature>
-                High: {Math.round(day.maxTemp)}°F<br />
-                Low: {Math.round(day.minTemp)}°F
+                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                <br />
+                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
-                Precipitation: {day.precipitationProbability}%
+                Precipitation: {day.precipitationProbability !== null ? `${day.precipitationProbability}%` : 'N/A'}
               </Precipitation>
               <WindSpeed>
-                Wind Speed: {day.windSpeed ? `${day.windSpeed} mph` : 'N/A'}
+                Wind Speed: {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
               </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
