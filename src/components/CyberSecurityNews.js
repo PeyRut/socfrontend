@@ -96,7 +96,12 @@ const CyberSecurityNews = () => {
   const fetchNews = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
-      setArticles(response.data.articles);
+      // Ensure that the response contains the expected data structure
+      if (response.data && response.data.articles && response.data.articles.length) {
+        setArticles(response.data.articles);
+      } else {
+        setArticles([]);
+      }
       setError(null);
     } catch (err) {
       console.error('Error fetching cybersecurity news:', err);
@@ -118,7 +123,7 @@ const CyberSecurityNews = () => {
       {loading && <Spinner />}
       {error && <p>{error}</p>}
       {!loading && !error && articles.length === 0 && <p>No latest news available at the moment.</p>}
-      {!loading && !error && articles.map((article, index) => (
+      {!loading && !error && articles && articles.map((article, index) => (
         <NewsItem key={index}>
           {article.urlToImage && <NewsImage src={article.urlToImage} alt="News Thumbnail" />}
           <NewsContent>
