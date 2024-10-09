@@ -4,7 +4,18 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import ReactAnimatedWeather from 'react-animated-weather';
+import {
+  WiDaySunny,
+  WiDayCloudy,
+  WiCloudy,
+  WiFog,
+  WiSprinkle,
+  WiRain,
+  WiSleet,
+  WiSnow,
+  WiThunderstorm,
+  WiUnknown,
+} from 'weather-icons-react';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -45,7 +56,6 @@ const ForecastCard = styled.div`
 `;
 
 const WeatherIcon = styled.div`
-  font-size: 3em;
   margin-bottom: 10px;
 `;
 
@@ -61,12 +71,6 @@ const Temperature = styled.div`
 `;
 
 const Precipitation = styled.div`
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: var(--accent-color);
-`;
-
-const WindSpeed = styled.div`
   font-size: 0.9em;
   margin-top: 5px;
   color: var(--accent-color);
@@ -94,34 +98,34 @@ const Spinner = styled.div`
 `;
 
 const weatherCodeMap = {
-  0: { description: 'Clear sky', iconType: 'CLEAR_DAY' },
-  1: { description: 'Mainly clear', iconType: 'CLEAR_DAY' },
-  2: { description: 'Partly cloudy', iconType: 'PARTLY_CLOUDY_DAY' },
-  3: { description: 'Overcast', iconType: 'CLOUDY' },
-  45: { description: 'Fog', iconType: 'FOG' },
-  48: { description: 'Depositing rime fog', iconType: 'FOG' },
-  51: { description: 'Light drizzle', iconType: 'RAIN' },
-  53: { description: 'Moderate drizzle', iconType: 'RAIN' },
-  55: { description: 'Dense drizzle', iconType: 'RAIN' },
-  56: { description: 'Light freezing drizzle', iconType: 'SLEET' },
-  57: { description: 'Dense freezing drizzle', iconType: 'SLEET' },
-  61: { description: 'Slight rain', iconType: 'RAIN' },
-  63: { description: 'Moderate rain', iconType: 'RAIN' },
-  65: { description: 'Heavy rain', iconType: 'RAIN' },
-  66: { description: 'Light freezing rain', iconType: 'SLEET' },
-  67: { description: 'Heavy freezing rain', iconType: 'SLEET' },
-  71: { description: 'Slight snow fall', iconType: 'SNOW' },
-  73: { description: 'Moderate snow fall', iconType: 'SNOW' },
-  75: { description: 'Heavy snow fall', iconType: 'SNOW' },
-  77: { description: 'Snow grains', iconType: 'SNOW' },
-  80: { description: 'Slight rain showers', iconType: 'RAIN' },
-  81: { description: 'Moderate rain showers', iconType: 'RAIN' },
-  82: { description: 'Violent rain showers', iconType: 'RAIN' },
-  85: { description: 'Slight snow showers', iconType: 'SNOW' },
-  86: { description: 'Heavy snow showers', iconType: 'SNOW' },
-  95: { description: 'Thunderstorm', iconType: 'RAIN' },
-  96: { description: 'Thunderstorm with slight hail', iconType: 'SLEET' },
-  99: { description: 'Thunderstorm with heavy hail', iconType: 'SLEET' },
+  0: { description: 'Clear sky', icon: <WiDaySunny size={64} color="#f39c12" /> },
+  1: { description: 'Mainly clear', icon: <WiDaySunny size={64} color="#f39c12" /> },
+  2: { description: 'Partly cloudy', icon: <WiDayCloudy size={64} color="#f39c12" /> },
+  3: { description: 'Overcast', icon: <WiCloudy size={64} color="#95a5a6" /> },
+  45: { description: 'Fog', icon: <WiFog size={64} color="#95a5a6" /> },
+  48: { description: 'Depositing rime fog', icon: <WiFog size={64} color="#95a5a6" /> },
+  51: { description: 'Light drizzle', icon: <WiSprinkle size={64} color="#3498db" /> },
+  53: { description: 'Moderate drizzle', icon: <WiSprinkle size={64} color="#3498db" /> },
+  55: { description: 'Dense drizzle', icon: <WiRain size={64} color="#3498db" /> },
+  56: { description: 'Light freezing drizzle', icon: <WiSleet size={64} color="#3498db" /> },
+  57: { description: 'Dense freezing drizzle', icon: <WiSleet size={64} color="#3498db" /> },
+  61: { description: 'Slight rain', icon: <WiRain size={64} color="#3498db" /> },
+  63: { description: 'Moderate rain', icon: <WiRain size={64} color="#3498db" /> },
+  65: { description: 'Heavy rain', icon: <WiRain size={64} color="#3498db" /> },
+  66: { description: 'Light freezing rain', icon: <WiSleet size={64} color="#3498db" /> },
+  67: { description: 'Heavy freezing rain', icon: <WiSleet size={64} color="#3498db" /> },
+  71: { description: 'Slight snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  73: { description: 'Moderate snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  75: { description: 'Heavy snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  77: { description: 'Snow grains', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  80: { description: 'Slight rain showers', icon: <WiRain size={64} color="#3498db" /> },
+  81: { description: 'Moderate rain showers', icon: <WiRain size={64} color="#3498db" /> },
+  82: { description: 'Violent rain showers', icon: <WiRain size={64} color="#3498db" /> },
+  85: { description: 'Slight snow showers', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  86: { description: 'Heavy snow showers', icon: <WiSnow size={64} color="#ecf0f1" /> },
+  95: { description: 'Thunderstorm', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
+  96: { description: 'Thunderstorm with slight hail', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
+  99: { description: 'Thunderstorm with heavy hail', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
 };
 
 const WeatherOverview = () => {
@@ -140,12 +144,10 @@ const WeatherOverview = () => {
               'temperature_2m_min',
               'weathercode',
               'precipitation_probability_max',
-              'windspeed_10m_max',
             ],
             timezone: 'America/Chicago',
           },
         });
-        console.log('API Response:', response.data); // For debugging
 
         const dailyData = response.data.daily;
 
@@ -161,7 +163,6 @@ const WeatherOverview = () => {
           precipitationProbability: dailyData.precipitation_probability_max
             ? dailyData.precipitation_probability_max[index]
             : null,
-          windSpeed: dailyData.windspeed_10m_max ? dailyData.windspeed_10m_max[index] : null,
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -202,30 +203,23 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            iconType: 'CLEAR_DAY',
+            icon: <WiUnknown size={64} color="#7f8c8d" />,
           };
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
-              <WeatherIcon>
-                <ReactAnimatedWeather
-                  icon={weatherInfo.iconType}
-                  color="goldenrod"
-                  size={64}
-                  animate={true}
-                />
-              </WeatherIcon>
+              <WeatherIcon>{weatherInfo.icon}</WeatherIcon>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
                 Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
-                Precipitation: {day.precipitationProbability !== null ? `${day.precipitationProbability}%` : 'N/A'}
+                Precipitation:{' '}
+                {day.precipitationProbability !== null
+                  ? `${day.precipitationProbability}%`
+                  : 'N/A'}
               </Precipitation>
-              <WindSpeed>
-                Wind Speed: {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
-              </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
