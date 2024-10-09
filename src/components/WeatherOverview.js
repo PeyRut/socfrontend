@@ -14,7 +14,7 @@ import {
   WiSleet,
   WiSnow,
   WiThunderstorm,
-  WiUnknown,
+  WiNa,
 } from 'weather-icons-react';
 
 const OverviewContainer = styled.div`
@@ -55,7 +55,7 @@ const ForecastCard = styled.div`
   }
 `;
 
-const WeatherIcon = styled.div`
+const WeatherIconContainer = styled.div`
   margin-bottom: 10px;
 `;
 
@@ -97,35 +97,36 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
+// Updated weatherCodeMap without JSX elements
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: <WiDaySunny size={64} color="#f39c12" /> },
-  1: { description: 'Mainly clear', icon: <WiDaySunny size={64} color="#f39c12" /> },
-  2: { description: 'Partly cloudy', icon: <WiDayCloudy size={64} color="#f39c12" /> },
-  3: { description: 'Overcast', icon: <WiCloudy size={64} color="#95a5a6" /> },
-  45: { description: 'Fog', icon: <WiFog size={64} color="#95a5a6" /> },
-  48: { description: 'Depositing rime fog', icon: <WiFog size={64} color="#95a5a6" /> },
-  51: { description: 'Light drizzle', icon: <WiSprinkle size={64} color="#3498db" /> },
-  53: { description: 'Moderate drizzle', icon: <WiSprinkle size={64} color="#3498db" /> },
-  55: { description: 'Dense drizzle', icon: <WiRain size={64} color="#3498db" /> },
-  56: { description: 'Light freezing drizzle', icon: <WiSleet size={64} color="#3498db" /> },
-  57: { description: 'Dense freezing drizzle', icon: <WiSleet size={64} color="#3498db" /> },
-  61: { description: 'Slight rain', icon: <WiRain size={64} color="#3498db" /> },
-  63: { description: 'Moderate rain', icon: <WiRain size={64} color="#3498db" /> },
-  65: { description: 'Heavy rain', icon: <WiRain size={64} color="#3498db" /> },
-  66: { description: 'Light freezing rain', icon: <WiSleet size={64} color="#3498db" /> },
-  67: { description: 'Heavy freezing rain', icon: <WiSleet size={64} color="#3498db" /> },
-  71: { description: 'Slight snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  73: { description: 'Moderate snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  75: { description: 'Heavy snow fall', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  77: { description: 'Snow grains', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  80: { description: 'Slight rain showers', icon: <WiRain size={64} color="#3498db" /> },
-  81: { description: 'Moderate rain showers', icon: <WiRain size={64} color="#3498db" /> },
-  82: { description: 'Violent rain showers', icon: <WiRain size={64} color="#3498db" /> },
-  85: { description: 'Slight snow showers', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  86: { description: 'Heavy snow showers', icon: <WiSnow size={64} color="#ecf0f1" /> },
-  95: { description: 'Thunderstorm', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
-  96: { description: 'Thunderstorm with slight hail', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
-  99: { description: 'Thunderstorm with heavy hail', icon: <WiThunderstorm size={64} color="#9b59b6" /> },
+  0: { description: 'Clear sky', iconComponent: WiDaySunny, color: '#f39c12' },
+  1: { description: 'Mainly clear', iconComponent: WiDaySunny, color: '#f39c12' },
+  2: { description: 'Partly cloudy', iconComponent: WiDayCloudy, color: '#f39c12' },
+  3: { description: 'Overcast', iconComponent: WiCloudy, color: '#95a5a6' },
+  45: { description: 'Fog', iconComponent: WiFog, color: '#95a5a6' },
+  48: { description: 'Depositing rime fog', iconComponent: WiFog, color: '#95a5a6' },
+  51: { description: 'Light drizzle', iconComponent: WiSprinkle, color: '#3498db' },
+  53: { description: 'Moderate drizzle', iconComponent: WiSprinkle, color: '#3498db' },
+  55: { description: 'Dense drizzle', iconComponent: WiRain, color: '#3498db' },
+  56: { description: 'Light freezing drizzle', iconComponent: WiSleet, color: '#3498db' },
+  57: { description: 'Dense freezing drizzle', iconComponent: WiSleet, color: '#3498db' },
+  61: { description: 'Slight rain', iconComponent: WiRain, color: '#3498db' },
+  63: { description: 'Moderate rain', iconComponent: WiRain, color: '#3498db' },
+  65: { description: 'Heavy rain', iconComponent: WiRain, color: '#3498db' },
+  66: { description: 'Light freezing rain', iconComponent: WiSleet, color: '#3498db' },
+  67: { description: 'Heavy freezing rain', iconComponent: WiSleet, color: '#3498db' },
+  71: { description: 'Slight snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
+  73: { description: 'Moderate snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
+  75: { description: 'Heavy snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
+  77: { description: 'Snow grains', iconComponent: WiSnow, color: '#ecf0f1' },
+  80: { description: 'Slight rain showers', iconComponent: WiRain, color: '#3498db' },
+  81: { description: 'Moderate rain showers', iconComponent: WiRain, color: '#3498db' },
+  82: { description: 'Violent rain showers', iconComponent: WiRain, color: '#3498db' },
+  85: { description: 'Slight snow showers', iconComponent: WiSnow, color: '#ecf0f1' },
+  86: { description: 'Heavy snow showers', iconComponent: WiSnow, color: '#ecf0f1' },
+  95: { description: 'Thunderstorm', iconComponent: WiThunderstorm, color: '#9b59b6' },
+  96: { description: 'Thunderstorm with slight hail', iconComponent: WiThunderstorm, color: '#9b59b6' },
+  99: { description: 'Thunderstorm with heavy hail', iconComponent: WiThunderstorm, color: '#9b59b6' },
 };
 
 const WeatherOverview = () => {
@@ -135,19 +136,22 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/weather`, {
-          params: {
-            latitude: 33.1032,
-            longitude: -96.6706,
-            daily: [
-              'temperature_2m_max',
-              'temperature_2m_min',
-              'weathercode',
-              'precipitation_probability_max',
-            ],
-            timezone: 'America/Chicago',
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/weather`,
+          {
+            params: {
+              latitude: 33.1032,
+              longitude: -96.6706,
+              daily: [
+                'temperature_2m_max',
+                'temperature_2m_min',
+                'weathercode',
+                'precipitation_probability_max',
+              ],
+              timezone: 'America/Chicago',
+            },
+          }
+        );
 
         const dailyData = response.data.daily;
 
@@ -157,9 +161,15 @@ const WeatherOverview = () => {
 
         const forecastData = dailyData.time.map((date, index) => ({
           date,
-          maxTemp: dailyData.temperature_2m_max ? dailyData.temperature_2m_max[index] : null,
-          minTemp: dailyData.temperature_2m_min ? dailyData.temperature_2m_min[index] : null,
-          weatherCode: dailyData.weathercode ? dailyData.weathercode[index] : null,
+          maxTemp: dailyData.temperature_2m_max
+            ? dailyData.temperature_2m_max[index]
+            : null,
+          minTemp: dailyData.temperature_2m_min
+            ? dailyData.temperature_2m_min[index]
+            : null,
+          weatherCode: dailyData.weathercode
+            ? dailyData.weathercode[index]
+            : null,
           precipitationProbability: dailyData.precipitation_probability_max
             ? dailyData.precipitation_probability_max[index]
             : null,
@@ -203,16 +213,22 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            icon: <WiUnknown size={64} color="#7f8c8d" />,
+            iconComponent: WiNa,
+            color: '#7f8c8d',
           };
+          const IconComponent = weatherInfo.iconComponent;
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
-              <WeatherIcon>{weatherInfo.icon}</WeatherIcon>
+              <WeatherIconContainer>
+                <IconComponent size={64} color={weatherInfo.color} />
+              </WeatherIconContainer>
               <Temperature>
-                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                High:{' '}
+                {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
-                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
+                Low:{' '}
+                {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
                 Precipitation:{' '}
