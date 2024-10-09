@@ -4,13 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import Lottie from 'react-lottie';
-import clearSkyAnimation from '../assets/weather-animations/clear-sky.json';
-import cloudyAnimation from '../assets/weather-animations/cloudy.json';
-import rainAnimation from '../assets/weather-animations/rain.json';
-import thunderstormAnimation from '../assets/weather-animations/thunderstorm.json';
-import snowAnimation from '../assets/weather-animations/snow.json';
-import fogAnimation from '../assets/weather-animations/fog.json';
+import WeatherIcon from 'react-icons-weather';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -98,38 +92,6 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Weather animation map
-const weatherAnimationMap = {
-  0: { description: 'Clear sky', animationData: clearSkyAnimation },
-  1: { description: 'Mainly clear', animationData: clearSkyAnimation },
-  2: { description: 'Partly cloudy', animationData: cloudyAnimation },
-  3: { description: 'Overcast', animationData: cloudyAnimation },
-  45: { description: 'Fog', animationData: fogAnimation },
-  48: { description: 'Depositing rime fog', animationData: fogAnimation },
-  51: { description: 'Light drizzle', animationData: rainAnimation },
-  53: { description: 'Moderate drizzle', animationData: rainAnimation },
-  55: { description: 'Dense drizzle', animationData: rainAnimation },
-  56: { description: 'Light freezing drizzle', animationData: rainAnimation },
-  57: { description: 'Dense freezing drizzle', animationData: rainAnimation },
-  61: { description: 'Slight rain', animationData: rainAnimation },
-  63: { description: 'Moderate rain', animationData: rainAnimation },
-  65: { description: 'Heavy rain', animationData: rainAnimation },
-  66: { description: 'Light freezing rain', animationData: rainAnimation },
-  67: { description: 'Heavy freezing rain', animationData: rainAnimation },
-  71: { description: 'Slight snow fall', animationData: snowAnimation },
-  73: { description: 'Moderate snow fall', animationData: snowAnimation },
-  75: { description: 'Heavy snow fall', animationData: snowAnimation },
-  77: { description: 'Snow grains', animationData: snowAnimation },
-  80: { description: 'Slight rain showers', animationData: rainAnimation },
-  81: { description: 'Moderate rain showers', animationData: rainAnimation },
-  82: { description: 'Violent rain showers', animationData: rainAnimation },
-  85: { description: 'Slight snow showers', animationData: snowAnimation },
-  86: { description: 'Heavy snow showers', animationData: snowAnimation },
-  95: { description: 'Thunderstorm', animationData: thunderstormAnimation },
-  96: { description: 'Thunderstorm with slight hail', animationData: thunderstormAnimation },
-  99: { description: 'Thunderstorm with heavy hail', animationData: thunderstormAnimation },
-};
-
 const WeatherOverview = () => {
   const [forecast, setForecast] = useState([]);
   const [error, setError] = useState(null);
@@ -216,25 +178,17 @@ const WeatherOverview = () => {
         {forecast.map((day, index) => {
           if (!day) return null;
           const date = moment(day.date);
-          const weatherInfo = weatherAnimationMap[day.weatherCode] || {
-            description: 'Unknown',
-            animationData: clearSkyAnimation,
-          };
-
-          const defaultOptions = {
-            loop: true,
-            autoplay: true,
-            animationData: weatherInfo.animationData,
-            rendererSettings: {
-              preserveAspectRatio: 'xMidYMid slice',
-            },
-          };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <Lottie options={defaultOptions} height={64} width={64} />
+                <WeatherIcon
+                  name="owm" // Using OpenWeatherMap icon set
+                  iconId={day.weatherCode} // Use the code from the weather API
+                  size="64"
+                  animate={true} // Enables animation
+                />
               </WeatherIconContainer>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
@@ -242,16 +196,14 @@ const WeatherOverview = () => {
                 Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
-                Precipitation:{' '}
-                {day.precipitationProbability !== null
+                Precipitation: {day.precipitationProbability !== null
                   ? `${day.precipitationProbability}%`
                   : 'N/A'}
               </Precipitation>
               <WindSpeed>
-                Wind Speed:{' '}
-                {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
+                Wind Speed: {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
               </WindSpeed>
-              <Description>{weatherInfo.description}</Description>
+              <Description>Weather Code: {day.weatherCode}</Description>
             </ForecastCard>
           );
         })}
