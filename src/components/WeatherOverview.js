@@ -14,7 +14,6 @@ import {
   WiSleet,
   WiSnow,
   WiThunderstorm,
-  WiNa,
 } from 'weather-icons-react';
 
 const OverviewContainer = styled.div`
@@ -213,7 +212,7 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            iconComponent: WiNa,
+            iconComponent: WiDaySunny,
             color: '#7f8c8d',
           };
           const IconComponent = weatherInfo.iconComponent;
