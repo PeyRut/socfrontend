@@ -3,12 +3,91 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import DOMPurify from 'dompurify'; // Import DOMPurify to sanitize HTML content
 
-// Styled Components (remain the same)
-// ... (Omitted for brevity)
+// Styled Components
+const NewsContainer = styled.div`
+  background: var(--card-background);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 20px;
+  height: 606px;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: none;
+`;
 
-// Loading Spinner (remains the same)
-// ... (Omitted for brevity)
+const NewsHeader = styled.h3`
+  margin-bottom: 15px;
+  color: var(--accent-color);
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+`;
+
+const NewsItem = styled.div`
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: var(--secondary-background);
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const NewsContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+`;
+
+const NewsImage = styled.img`
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 15px;
+`;
+
+const NewsTitle = styled.a`
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--accent-color);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const NewsDescription = styled.p`
+  font-size: 0.85em;
+  color: var(--text-muted-color);
+  margin-top: 5px;
+  line-height: 1.4;
+`;
+
+// Loading Spinner
+const Spinner = styled.div`
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid var(--accent-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1.5s linear infinite;
+  margin: 20px auto;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
 
 const CyberSecurityNews = () => {
   const [articles, setArticles] = useState([]);
@@ -70,7 +149,7 @@ const CyberSecurityNews = () => {
               {article.description && (
                 <NewsDescription
                   dangerouslySetInnerHTML={{
-                    __html: article.description,
+                    __html: DOMPurify.sanitize(article.description),
                   }}
                 ></NewsDescription>
               )}
