@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import WeatherIcon from 'weather-icons-react';
+import Skycons from 'react-skycons';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -92,19 +92,19 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Mapping weather codes from Open-Meteo to Weather Icons
+// Mapping weather codes from Open-Meteo to Skycons types
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: 'day-sunny' },
-  1: { description: 'Mainly clear', icon: 'day-sunny' },
-  2: { description: 'Partly cloudy', icon: 'day-cloudy' },
-  3: { description: 'Overcast', icon: 'cloud' },
-  45: { description: 'Fog', icon: 'fog' },
-  48: { description: 'Depositing rime fog', icon: 'fog' },
-  51: { description: 'Light drizzle', icon: 'sprinkle' },
-  61: { description: 'Slight rain', icon: 'rain' },
-  71: { description: 'Slight snow fall', icon: 'snow' },
-  80: { description: 'Rain showers', icon: 'rain' },
-  95: { description: 'Thunderstorm', icon: 'thunderstorm' },
+  0: { description: 'Clear sky', icon: 'CLEAR_DAY' },
+  1: { description: 'Mainly clear', icon: 'CLEAR_DAY' },
+  2: { description: 'Partly cloudy', icon: 'PARTLY_CLOUDY_DAY' },
+  3: { description: 'Overcast', icon: 'CLOUDY' },
+  45: { description: 'Fog', icon: 'FOG' },
+  48: { description: 'Depositing rime fog', icon: 'FOG' },
+  51: { description: 'Light drizzle', icon: 'RAIN' },
+  61: { description: 'Slight rain', icon: 'RAIN' },
+  71: { description: 'Slight snow fall', icon: 'SNOW' },
+  80: { description: 'Rain showers', icon: 'SHOWERS_DAY' },
+  95: { description: 'Thunderstorm', icon: 'THUNDER' },
 };
 
 const WeatherOverview = () => {
@@ -195,18 +195,18 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            icon: 'day-sunny',
+            icon: 'CLEAR_DAY',
           };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <WeatherIcon
-                  name="wi"
-                  iconId={weatherInfo.icon}
-                  size={64}
+                <Skycons
                   color="#f39c12"
+                  type={weatherInfo.icon}
+                  animate={true}
+                  size={64}
                 />
               </WeatherIconContainer>
               <Temperature>
