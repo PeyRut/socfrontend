@@ -15,6 +15,12 @@ import {
   WiSnow,
   WiThunderstorm,
 } from 'weather-icons-react';
+import Lottie from 'react-lottie';
+import sunnyAnimation from '../assets/animations/sunny.json';
+import cloudyAnimation from '../assets/animations/cloudy.json';
+import rainAnimation from '../assets/animations/rain.json';
+import snowAnimation from '../assets/animations/snow.json';
+import thunderstormAnimation from '../assets/animations/thunderstorm.json';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -75,6 +81,12 @@ const Precipitation = styled.div`
   color: var(--accent-color);
 `;
 
+const WindSpeed = styled.div`
+  font-size: 0.9em;
+  margin-top: 5px;
+  color: var(--accent-color);
+`;
+
 const Description = styled.div`
   font-size: 0.9em;
   margin-top: 5px;
@@ -96,36 +108,35 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Updated weatherCodeMap without JSX elements
 const weatherCodeMap = {
-  0: { description: 'Clear sky', iconComponent: WiDaySunny, color: '#f39c12' },
-  1: { description: 'Mainly clear', iconComponent: WiDaySunny, color: '#f39c12' },
-  2: { description: 'Partly cloudy', iconComponent: WiDayCloudy, color: '#f39c12' },
-  3: { description: 'Overcast', iconComponent: WiCloudy, color: '#95a5a6' },
-  45: { description: 'Fog', iconComponent: WiFog, color: '#95a5a6' },
-  48: { description: 'Depositing rime fog', iconComponent: WiFog, color: '#95a5a6' },
-  51: { description: 'Light drizzle', iconComponent: WiSprinkle, color: '#3498db' },
-  53: { description: 'Moderate drizzle', iconComponent: WiSprinkle, color: '#3498db' },
-  55: { description: 'Dense drizzle', iconComponent: WiRain, color: '#3498db' },
-  56: { description: 'Light freezing drizzle', iconComponent: WiSleet, color: '#3498db' },
-  57: { description: 'Dense freezing drizzle', iconComponent: WiSleet, color: '#3498db' },
-  61: { description: 'Slight rain', iconComponent: WiRain, color: '#3498db' },
-  63: { description: 'Moderate rain', iconComponent: WiRain, color: '#3498db' },
-  65: { description: 'Heavy rain', iconComponent: WiRain, color: '#3498db' },
-  66: { description: 'Light freezing rain', iconComponent: WiSleet, color: '#3498db' },
-  67: { description: 'Heavy freezing rain', iconComponent: WiSleet, color: '#3498db' },
-  71: { description: 'Slight snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
-  73: { description: 'Moderate snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
-  75: { description: 'Heavy snow fall', iconComponent: WiSnow, color: '#ecf0f1' },
-  77: { description: 'Snow grains', iconComponent: WiSnow, color: '#ecf0f1' },
-  80: { description: 'Slight rain showers', iconComponent: WiRain, color: '#3498db' },
-  81: { description: 'Moderate rain showers', iconComponent: WiRain, color: '#3498db' },
-  82: { description: 'Violent rain showers', iconComponent: WiRain, color: '#3498db' },
-  85: { description: 'Slight snow showers', iconComponent: WiSnow, color: '#ecf0f1' },
-  86: { description: 'Heavy snow showers', iconComponent: WiSnow, color: '#ecf0f1' },
-  95: { description: 'Thunderstorm', iconComponent: WiThunderstorm, color: '#9b59b6' },
-  96: { description: 'Thunderstorm with slight hail', iconComponent: WiThunderstorm, color: '#9b59b6' },
-  99: { description: 'Thunderstorm with heavy hail', iconComponent: WiThunderstorm, color: '#9b59b6' },
+  0: { description: 'Clear sky', animationData: sunnyAnimation },
+  1: { description: 'Mainly clear', animationData: sunnyAnimation },
+  2: { description: 'Partly cloudy', animationData: cloudyAnimation },
+  3: { description: 'Overcast', animationData: cloudyAnimation },
+  45: { description: 'Fog', animationData: cloudyAnimation },
+  48: { description: 'Depositing rime fog', animationData: cloudyAnimation },
+  51: { description: 'Light drizzle', animationData: rainAnimation },
+  53: { description: 'Moderate drizzle', animationData: rainAnimation },
+  55: { description: 'Dense drizzle', animationData: rainAnimation },
+  56: { description: 'Light freezing drizzle', animationData: rainAnimation },
+  57: { description: 'Dense freezing drizzle', animationData: rainAnimation },
+  61: { description: 'Slight rain', animationData: rainAnimation },
+  63: { description: 'Moderate rain', animationData: rainAnimation },
+  65: { description: 'Heavy rain', animationData: rainAnimation },
+  66: { description: 'Light freezing rain', animationData: rainAnimation },
+  67: { description: 'Heavy freezing rain', animationData: rainAnimation },
+  71: { description: 'Slight snow fall', animationData: snowAnimation },
+  73: { description: 'Moderate snow fall', animationData: snowAnimation },
+  75: { description: 'Heavy snow fall', animationData: snowAnimation },
+  77: { description: 'Snow grains', animationData: snowAnimation },
+  80: { description: 'Slight rain showers', animationData: rainAnimation },
+  81: { description: 'Moderate rain showers', animationData: rainAnimation },
+  82: { description: 'Violent rain showers', animationData: rainAnimation },
+  85: { description: 'Slight snow showers', animationData: snowAnimation },
+  86: { description: 'Heavy snow showers', animationData: snowAnimation },
+  95: { description: 'Thunderstorm', animationData: thunderstormAnimation },
+  96: { description: 'Thunderstorm with slight hail', animationData: thunderstormAnimation },
+  99: { description: 'Thunderstorm with heavy hail', animationData: thunderstormAnimation },
 };
 
 const WeatherOverview = () => {
@@ -146,6 +157,7 @@ const WeatherOverview = () => {
                 'temperature_2m_min',
                 'weathercode',
                 'precipitation_probability_max',
+                'windspeed_10m_max',
               ],
               timezone: 'America/Chicago',
             },
@@ -171,6 +183,9 @@ const WeatherOverview = () => {
             : null,
           precipitationProbability: dailyData.precipitation_probability_max
             ? dailyData.precipitation_probability_max[index]
+            : null,
+          windSpeed: dailyData.windspeed_10m_max
+            ? dailyData.windspeed_10m_max[index]
             : null,
         }));
         setForecast(forecastData);
@@ -212,15 +227,24 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            iconComponent: WiDaySunny,
-            color: '#7f8c8d',
+            animationData: cloudyAnimation,
           };
-          const IconComponent = weatherInfo.iconComponent;
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <IconComponent size={64} color={weatherInfo.color} />
+                <Lottie
+                  options={{
+                    loop: true,
+                    autoplay: true,
+                    animationData: weatherInfo.animationData,
+                    rendererSettings: {
+                      preserveAspectRatio: 'xMidYMid slice',
+                    },
+                  }}
+                  height={100}
+                  width={100}
+                />
               </WeatherIconContainer>
               <Temperature>
                 High:{' '}
@@ -235,6 +259,10 @@ const WeatherOverview = () => {
                   ? `${day.precipitationProbability}%`
                   : 'N/A'}
               </Precipitation>
+              <WindSpeed>
+                Wind Speed:{' '}
+                {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
+              </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
