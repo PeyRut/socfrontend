@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import { Player } from '@lottiefiles/react-lottie-player';
+import WeatherIcon from 'weather-icons-react';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -92,52 +92,19 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Mapping weather codes from Open-Meteo to Lottie animation URLs
+// Mapping weather codes from Open-Meteo to Weather Icons
 const weatherCodeMap = {
-  0: {
-    description: 'Clear sky',
-    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
-  },
-  1: {
-    description: 'Mainly clear',
-    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
-  },
-  2: {
-    description: 'Partly cloudy',
-    animationUrl: 'https://assets6.lottiefiles.com/packages/lf20_8lg6m6.json',
-  },
-  3: {
-    description: 'Overcast',
-    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_dgjue3xo.json',
-  },
-  45: {
-    description: 'Fog',
-    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_foggy.json',
-  },
-  48: {
-    description: 'Depositing rime fog',
-    animationUrl: 'https://assets2.lottiefiles.com/packages/lf20_foggy.json',
-  },
-  51: {
-    description: 'Light drizzle',
-    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
-  },
-  61: {
-    description: 'Slight rain',
-    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
-  },
-  71: {
-    description: 'Slight snow fall',
-    animationUrl: 'https://assets1.lottiefiles.com/packages/lf20_snowy.json',
-  },
-  80: {
-    description: 'Rain showers',
-    animationUrl: 'https://assets9.lottiefiles.com/packages/lf20_rainy.json',
-  },
-  95: {
-    description: 'Thunderstorm',
-    animationUrl: 'https://assets8.lottiefiles.com/packages/lf20_stormy.json',
-  },
+  0: { description: 'Clear sky', icon: 'day-sunny' },
+  1: { description: 'Mainly clear', icon: 'day-sunny' },
+  2: { description: 'Partly cloudy', icon: 'day-cloudy' },
+  3: { description: 'Overcast', icon: 'cloud' },
+  45: { description: 'Fog', icon: 'fog' },
+  48: { description: 'Depositing rime fog', icon: 'fog' },
+  51: { description: 'Light drizzle', icon: 'sprinkle' },
+  61: { description: 'Slight rain', icon: 'rain' },
+  71: { description: 'Slight snow fall', icon: 'snow' },
+  80: { description: 'Rain showers', icon: 'rain' },
+  95: { description: 'Thunderstorm', icon: 'thunderstorm' },
 };
 
 const WeatherOverview = () => {
@@ -228,19 +195,18 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            animationUrl:
-              'https://assets6.lottiefiles.com/packages/lf20_4klv9rbm.json',
+            icon: 'day-sunny',
           };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <Player
-                  autoplay
-                  loop
-                  src={weatherInfo.animationUrl}
-                  style={{ height: '100px', width: '100px' }}
+                <WeatherIcon
+                  name="wi"
+                  iconId={weatherInfo.icon}
+                  size={64}
+                  color="#f39c12"
                 />
               </WeatherIconContainer>
               <Temperature>
