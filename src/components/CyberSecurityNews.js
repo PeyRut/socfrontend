@@ -96,20 +96,11 @@ const CyberSecurityNews = () => {
   const fetchNews = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/news`);
-      console.log('API Response:', response.data); // Log the entire response
-      
+      // Ensure that the response contains the expected data structure
       if (response.data && response.data.articles && response.data.articles.length) {
         setArticles(response.data.articles);
       } else {
-        // Fallback mock data for testing
-        setArticles([
-          {
-            title: "Test Article",
-            description: "This is a test article description.",
-            url: "https://example.com",
-            urlToImage: "https://via.placeholder.com/150"
-          }
-        ]);
+        setArticles([]);
       }
       setError(null);
     } catch (err) {
@@ -131,10 +122,8 @@ const CyberSecurityNews = () => {
       <NewsHeader>Latest Cybersecurity News</NewsHeader>
       {loading && <Spinner />}
       {error && <p>{error}</p>}
-      {!loading && !error && articles.length === 0 && (
-        <p>No latest news available at the moment. Please check back later.</p>
-      )}
-      {!loading && !error && articles && articles.length > 0 && articles.map((article, index) => (
+      {!loading && !error && articles.length === 0 && <p>No latest news available at the moment.</p>}
+      {!loading && !error && articles && articles.map((article, index) => (
         <NewsItem key={index}>
           {article.urlToImage && <NewsImage src={article.urlToImage} alt="News Thumbnail" />}
           <NewsContent>
