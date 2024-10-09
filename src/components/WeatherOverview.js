@@ -4,23 +4,13 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import {
-  WiDaySunny,
-  WiDayCloudy,
-  WiCloudy,
-  WiFog,
-  WiSprinkle,
-  WiRain,
-  WiSleet,
-  WiSnow,
-  WiThunderstorm,
-} from 'weather-icons-react';
 import Lottie from 'react-lottie';
-import sunnyAnimation from '../assets/animations/sunny.json';
-import cloudyAnimation from '../assets/animations/cloudy.json';
-import rainAnimation from '../assets/animations/rain.json';
-import snowAnimation from '../assets/animations/snow.json';
-import thunderstormAnimation from '../assets/animations/thunderstorm.json';
+import clearSkyAnimation from '../assets/weather-animations/clear-sky.json';
+import cloudyAnimation from '../assets/weather-animations/cloudy.json';
+import rainAnimation from '../assets/weather-animations/rain.json';
+import thunderstormAnimation from '../assets/weather-animations/thunderstorm.json';
+import snowAnimation from '../assets/weather-animations/snow.json';
+import fogAnimation from '../assets/weather-animations/fog.json';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -108,13 +98,14 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-const weatherCodeMap = {
-  0: { description: 'Clear sky', animationData: sunnyAnimation },
-  1: { description: 'Mainly clear', animationData: sunnyAnimation },
+// Weather animation map
+const weatherAnimationMap = {
+  0: { description: 'Clear sky', animationData: clearSkyAnimation },
+  1: { description: 'Mainly clear', animationData: clearSkyAnimation },
   2: { description: 'Partly cloudy', animationData: cloudyAnimation },
   3: { description: 'Overcast', animationData: cloudyAnimation },
-  45: { description: 'Fog', animationData: cloudyAnimation },
-  48: { description: 'Depositing rime fog', animationData: cloudyAnimation },
+  45: { description: 'Fog', animationData: fogAnimation },
+  48: { description: 'Depositing rime fog', animationData: fogAnimation },
   51: { description: 'Light drizzle', animationData: rainAnimation },
   53: { description: 'Moderate drizzle', animationData: rainAnimation },
   55: { description: 'Dense drizzle', animationData: rainAnimation },
@@ -225,33 +216,30 @@ const WeatherOverview = () => {
         {forecast.map((day, index) => {
           if (!day) return null;
           const date = moment(day.date);
-          const weatherInfo = weatherCodeMap[day.weatherCode] || {
+          const weatherInfo = weatherAnimationMap[day.weatherCode] || {
             description: 'Unknown',
-            animationData: cloudyAnimation,
+            animationData: clearSkyAnimation,
           };
+
+          const defaultOptions = {
+            loop: true,
+            autoplay: true,
+            animationData: weatherInfo.animationData,
+            rendererSettings: {
+              preserveAspectRatio: 'xMidYMid slice',
+            },
+          };
+
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <Lottie
-                  options={{
-                    loop: true,
-                    autoplay: true,
-                    animationData: weatherInfo.animationData,
-                    rendererSettings: {
-                      preserveAspectRatio: 'xMidYMid slice',
-                    },
-                  }}
-                  height={100}
-                  width={100}
-                />
+                <Lottie options={defaultOptions} height={64} width={64} />
               </WeatherIconContainer>
               <Temperature>
-                High:{' '}
-                {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
-                Low:{' '}
-                {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
+                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
                 Precipitation:{' '}
