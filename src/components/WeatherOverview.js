@@ -23,7 +23,7 @@ const OverviewContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   max-width: 1200px;
-  height: 350px; /* Set to match the height of the news widget */
+  height: 600px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -40,57 +40,58 @@ const OverviewHeader = styled.h2`
 const ForecastGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
+  gap: 15px;
   overflow: hidden;
-  flex-grow: 1; /* Ensures that the grid takes up remaining space */
+  flex-grow: 1;
 `;
 
 const ForecastCard = styled.div`
-  background: var(--card-background);
-  border-radius: 8px;
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 15px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const WeatherIconContainer = styled.div`
   margin-bottom: 10px;
-  font-size: 2.5em;
+  font-size: 3em;
+  color: var(--accent-color);
 `;
 
 const Day = styled.div`
-  font-size: 1em;
-  margin-bottom: 5px;
+  font-size: 1.2em;
+  margin-bottom: 10px;
   font-weight: bold;
   color: var(--accent-color);
 `;
 
 const Temperature = styled.div`
-  font-size: 0.9em;
-  margin: 5px 0;
+  font-size: 1em;
+  margin: 10px 0;
+  font-weight: bold;
+  color: var(--text-color);
 `;
 
 const Precipitation = styled.div`
-  font-size: 0.8em;
-  margin: 5px 0;
+  font-size: 0.9em;
+  margin-bottom: 5px;
   color: var(--primary-color);
 `;
 
 const Description = styled.div`
-  font-size: 0.9em;
-  margin-top: 5px;
+  font-size: 1em;
   color: var(--accent-color);
-  font-weight: bold;
 `;
 
 const spin = keyframes`
