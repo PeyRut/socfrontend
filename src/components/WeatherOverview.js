@@ -4,7 +4,16 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import Skycons from 'react-skycons';
+import {
+  WiDaySunny,
+  WiDayCloudy,
+  WiCloudy,
+  WiFog,
+  WiRain,
+  WiSnow,
+  WiThunderstorm,
+  WiShowers,
+} from 'react-icons/wi';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -46,6 +55,7 @@ const ForecastCard = styled.div`
 
 const WeatherIconContainer = styled.div`
   margin-bottom: 10px;
+  font-size: 3em;
 `;
 
 const Day = styled.div`
@@ -92,19 +102,19 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Mapping weather codes from Open-Meteo to Skycons types
+// Mapping weather codes from Open-Meteo to Weather Icons from React Icons
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: 'CLEAR_DAY' },
-  1: { description: 'Mainly clear', icon: 'CLEAR_DAY' },
-  2: { description: 'Partly cloudy', icon: 'PARTLY_CLOUDY_DAY' },
-  3: { description: 'Overcast', icon: 'CLOUDY' },
-  45: { description: 'Fog', icon: 'FOG' },
-  48: { description: 'Depositing rime fog', icon: 'FOG' },
-  51: { description: 'Light drizzle', icon: 'RAIN' },
-  61: { description: 'Slight rain', icon: 'RAIN' },
-  71: { description: 'Slight snow fall', icon: 'SNOW' },
-  80: { description: 'Rain showers', icon: 'SHOWERS_DAY' },
-  95: { description: 'Thunderstorm', icon: 'THUNDER' },
+  0: { description: 'Clear sky', icon: WiDaySunny },
+  1: { description: 'Mainly clear', icon: WiDaySunny },
+  2: { description: 'Partly cloudy', icon: WiDayCloudy },
+  3: { description: 'Overcast', icon: WiCloudy },
+  45: { description: 'Fog', icon: WiFog },
+  48: { description: 'Depositing rime fog', icon: WiFog },
+  51: { description: 'Light drizzle', icon: WiShowers },
+  61: { description: 'Slight rain', icon: WiRain },
+  71: { description: 'Slight snow fall', icon: WiSnow },
+  80: { description: 'Rain showers', icon: WiShowers },
+  95: { description: 'Thunderstorm', icon: WiThunderstorm },
 };
 
 const WeatherOverview = () => {
@@ -195,19 +205,15 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            icon: 'CLEAR_DAY',
+            icon: WiDaySunny,
           };
+          const IconComponent = weatherInfo.icon;
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <Skycons
-                  color="#f39c12"
-                  type={weatherInfo.icon}
-                  animate={true}
-                  size={64}
-                />
+                <IconComponent />
               </WeatherIconContainer>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
