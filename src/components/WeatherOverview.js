@@ -163,6 +163,9 @@ const WeatherOverview = () => {
           throw new Error('Invalid daily data structure in API response.');
         }
 
+        // Log the daily data to debug wind speed data retrieval
+        console.log('Daily Data:', dailyData);
+
         const forecastData = dailyData.time.map((date, index) => ({
           date,
           maxTemp: dailyData.temperature_2m_max
@@ -178,8 +181,8 @@ const WeatherOverview = () => {
             ? dailyData.precipitation_probability_max[index]
             : null,
           windSpeed: dailyData.windspeed_10m_max
-            ? dailyData.windspeed_10m_max[index]
-            : 'No data',
+            ? `${dailyData.windspeed_10m_max[index]} mph`
+            : 'N/A',
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -241,7 +244,7 @@ const WeatherOverview = () => {
                   : 'N/A'}
               </Precipitation>
               <WindSpeed>
-                Wind Speed: {day.windSpeed !== 'No data' ? `${day.windSpeed} mph` : 'N/A'}
+                Wind Speed: {day.windSpeed}
               </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
