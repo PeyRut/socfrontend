@@ -23,11 +23,12 @@ const OverviewContainer = styled.div`
   margin-top: 40px;
   width: 100%;
   max-width: 1200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 `;
 
 const OverviewHeader = styled.h2`
-  font-size: 2em;
-  margin-bottom: 20px;
+  font-size: 2.5em;
+  margin-bottom: 30px;
   text-align: center;
   color: var(--accent-color);
 `;
@@ -35,56 +36,59 @@ const OverviewHeader = styled.h2`
 const ForecastGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 15px;
+  gap: 20px;
   overflow: hidden;
 `;
 
 const ForecastCard = styled.div`
   background: var(--card-background);
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: 12px;
+  padding: 20px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const WeatherIconContainer = styled.div`
-  margin-bottom: 10px;
-  font-size: 3em;
+  margin-bottom: 15px;
+  font-size: 3.5em;
 `;
 
 const Day = styled.div`
-  font-size: 1.2em;
-  margin-bottom: 10px;
+  font-size: 1.4em;
+  margin-bottom: 15px;
   font-weight: bold;
+  color: var(--accent-color);
 `;
 
 const Temperature = styled.div`
-  font-size: 1em;
-  margin-top: 5px;
+  font-size: 1.1em;
+  margin: 10px 0;
 `;
 
 const Precipitation = styled.div`
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: var(--accent-color);
+  font-size: 1em;
+  margin: 10px 0;
+  color: var(--primary-color);
 `;
 
 const WindSpeed = styled.div`
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: var(--accent-color);
+  font-size: 1em;
+  margin: 10px 0;
+  color: var(--primary-color);
 `;
 
 const Description = styled.div`
-  font-size: 0.9em;
-  margin-top: 5px;
+  font-size: 1em;
+  margin-top: 10px;
   color: var(--accent-color);
+  font-weight: bold;
 `;
 
 const spin = keyframes`
@@ -104,32 +108,32 @@ const Spinner = styled.div`
 
 // Updated mapping for weather codes to React Icons from Wi
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: WiDaySunny },
-  1: { description: 'Mainly clear', icon: WiDaySunny },
-  2: { description: 'Partly cloudy', icon: WiDayCloudy },
-  3: { description: 'Overcast', icon: WiCloudy },
-  45: { description: 'Fog', icon: WiFog },
-  48: { description: 'Depositing rime fog', icon: WiFog },
-  51: { description: 'Light drizzle', icon: WiShowers },
-  53: { description: 'Moderate drizzle', icon: WiShowers },
-  55: { description: 'Dense drizzle', icon: WiRain },
-  61: { description: 'Slight rain', icon: WiDayCloudy },
-  63: { description: 'Moderate rain', icon: WiRain },
-  65: { description: 'Heavy rain', icon: WiShowers },
-  66: { description: 'Light freezing rain', icon: WiRain },
-  67: { description: 'Heavy freezing rain', icon: WiShowers },
-  71: { description: 'Slight snow fall', icon: WiSnow },
-  73: { description: 'Moderate snow fall', icon: WiSnow },
-  75: { description: 'Heavy snow fall', icon: WiSnow },
-  77: { description: 'Snow grains', icon: WiSnow },
-  80: { description: 'Slight rain showers', icon: WiShowers },
-  81: { description: 'Moderate rain showers', icon: WiShowers },
-  82: { description: 'Violent rain showers', icon: WiShowers },
-  85: { description: 'Slight snow showers', icon: WiSnow },
-  86: { description: 'Heavy snow showers', icon: WiSnow },
-  95: { description: 'Thunderstorm', icon: WiThunderstorm },
-  96: { description: 'Thunderstorm with slight hail', icon: WiThunderstorm },
-  99: { description: 'Thunderstorm with heavy hail', icon: WiThunderstorm },
+  0: { description: 'Clear sky', icon: WiDaySunny, color: '#f39c12' },
+  1: { description: 'Mainly clear', icon: WiDaySunny, color: '#f39c12' },
+  2: { description: 'Partly cloudy', icon: WiDayCloudy, color: '#f1c40f' },
+  3: { description: 'Overcast', icon: WiCloudy, color: '#95a5a6' },
+  45: { description: 'Fog', icon: WiFog, color: '#95a5a6' },
+  48: { description: 'Depositing rime fog', icon: WiFog, color: '#95a5a6' },
+  51: { description: 'Light drizzle', icon: WiShowers, color: '#3498db' },
+  53: { description: 'Moderate drizzle', icon: WiShowers, color: '#3498db' },
+  55: { description: 'Dense drizzle', icon: WiRain, color: '#2980b9' },
+  61: { description: 'Slight rain', icon: WiDayCloudy, color: '#3498db' },
+  63: { description: 'Moderate rain', icon: WiRain, color: '#2980b9' },
+  65: { description: 'Heavy rain', icon: WiShowers, color: '#2980b9' },
+  66: { description: 'Light freezing rain', icon: WiRain, color: '#2980b9' },
+  67: { description: 'Heavy freezing rain', icon: WiShowers, color: '#2980b9' },
+  71: { description: 'Slight snow fall', icon: WiSnow, color: '#ecf0f1' },
+  73: { description: 'Moderate snow fall', icon: WiSnow, color: '#ecf0f1' },
+  75: { description: 'Heavy snow fall', icon: WiSnow, color: '#ecf0f1' },
+  77: { description: 'Snow grains', icon: WiSnow, color: '#ecf0f1' },
+  80: { description: 'Slight rain showers', icon: WiShowers, color: '#3498db' },
+  81: { description: 'Moderate rain showers', icon: WiShowers, color: '#2980b9' },
+  82: { description: 'Violent rain showers', icon: WiShowers, color: '#2980b9' },
+  85: { description: 'Slight snow showers', icon: WiSnow, color: '#ecf0f1' },
+  86: { description: 'Heavy snow showers', icon: WiSnow, color: '#ecf0f1' },
+  95: { description: 'Thunderstorm', icon: WiThunderstorm, color: '#9b59b6' },
+  96: { description: 'Thunderstorm with slight hail', icon: WiThunderstorm, color: '#9b59b6' },
+  99: { description: 'Thunderstorm with heavy hail', icon: WiThunderstorm, color: '#8e44ad' },
 };
 
 const WeatherOverview = () => {
@@ -162,9 +166,6 @@ const WeatherOverview = () => {
         if (!dailyData || !dailyData.time) {
           throw new Error('Invalid daily data structure in API response.');
         }
-
-        // Log the daily data to debug wind speed data retrieval
-        console.log('Daily Data:', dailyData);
 
         const forecastData = dailyData.time.map((date, index) => ({
           date,
@@ -224,6 +225,7 @@ const WeatherOverview = () => {
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
             icon: WiDaySunny,
+            color: '#7f8c8d',
           };
           const IconComponent = weatherInfo.icon;
 
@@ -231,7 +233,7 @@ const WeatherOverview = () => {
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <IconComponent />
+                <IconComponent color={weatherInfo.color} />
               </WeatherIconContainer>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
