@@ -23,11 +23,9 @@ const OverviewContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   max-width: 1200px;
-  height: 600px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 `;
 
 const OverviewHeader = styled.h2`
@@ -40,22 +38,22 @@ const OverviewHeader = styled.h2`
 const ForecastGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 15px;
+  gap: 10px;
   overflow: hidden;
-  flex-grow: 1;
 `;
 
 const ForecastCard = styled.div`
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-background);
   border-radius: 12px;
   padding: 15px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:hover {
     transform: translateY(-5px);
@@ -64,21 +62,21 @@ const ForecastCard = styled.div`
 `;
 
 const WeatherIconContainer = styled.div`
-  margin-bottom: 10px;
   font-size: 3em;
   color: var(--accent-color);
+  margin-bottom: 10px;
 `;
 
 const Day = styled.div`
-  font-size: 1.2em;
-  margin-bottom: 10px;
+  font-size: 1.1em;
+  margin-bottom: 5px;
   font-weight: bold;
   color: var(--accent-color);
 `;
 
 const Temperature = styled.div`
   font-size: 1em;
-  margin: 10px 0;
+  margin: 8px 0;
   font-weight: bold;
   color: var(--text-color);
 `;
@@ -90,8 +88,10 @@ const Precipitation = styled.div`
 `;
 
 const Description = styled.div`
-  font-size: 1em;
+  font-size: 0.95em;
+  margin-top: 5px;
   color: var(--accent-color);
+  font-style: italic;
 `;
 
 const spin = keyframes`
