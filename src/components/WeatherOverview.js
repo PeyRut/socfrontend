@@ -4,16 +4,6 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
-import {
-  WiDaySunny,
-  WiDayCloudy,
-  WiCloudy,
-  WiFog,
-  WiRain,
-  WiSnow,
-  WiThunderstorm,
-  WiShowers,
-} from 'react-icons/wi';
 
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
@@ -62,8 +52,6 @@ const ForecastCard = styled.div`
 `;
 
 const WeatherIconContainer = styled.div`
-  font-size: 3em;
-  color: var(--accent-color);
   margin-bottom: 10px;
 `;
 
@@ -109,34 +97,34 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Updated mapping for weather codes to React Icons from Wi
+// Updated mapping for weather codes to icon file paths
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: WiDaySunny, color: '#f39c12' },
-  1: { description: 'Mainly clear', icon: WiDaySunny, color: '#f39c12' },
-  2: { description: 'Partly cloudy', icon: WiDayCloudy, color: '#f1c40f' },
-  3: { description: 'Overcast', icon: WiCloudy, color: '#95a5a6' },
-  45: { description: 'Fog', icon: WiFog, color: '#95a5a6' },
-  48: { description: 'Depositing rime fog', icon: WiFog, color: '#95a5a6' },
-  51: { description: 'Light drizzle', icon: WiShowers, color: '#3498db' },
-  53: { description: 'Moderate drizzle', icon: WiShowers, color: '#3498db' },
-  55: { description: 'Dense drizzle', icon: WiRain, color: '#2980b9' },
-  61: { description: 'Slight rain', icon: WiDayCloudy, color: '#3498db' },
-  63: { description: 'Moderate rain', icon: WiRain, color: '#2980b9' },
-  65: { description: 'Heavy rain', icon: WiShowers, color: '#2980b9' },
-  66: { description: 'Light freezing rain', icon: WiRain, color: '#2980b9' },
-  67: { description: 'Heavy freezing rain', icon: WiShowers, color: '#2980b9' },
-  71: { description: 'Slight snow fall', icon: WiSnow, color: '#ecf0f1' },
-  73: { description: 'Moderate snow fall', icon: WiSnow, color: '#ecf0f1' },
-  75: { description: 'Heavy snow fall', icon: WiSnow, color: '#ecf0f1' },
-  77: { description: 'Snow grains', icon: WiSnow, color: '#ecf0f1' },
-  80: { description: 'Slight rain showers', icon: WiShowers, color: '#3498db' },
-  81: { description: 'Moderate rain showers', icon: WiShowers, color: '#2980b9' },
-  82: { description: 'Violent rain showers', icon: WiShowers, color: '#2980b9' },
-  85: { description: 'Slight snow showers', icon: WiSnow, color: '#ecf0f1' },
-  86: { description: 'Heavy snow showers', icon: WiSnow, color: '#ecf0f1' },
-  95: { description: 'Thunderstorm', icon: WiThunderstorm, color: '#9b59b6' },
-  96: { description: 'Thunderstorm with slight hail', icon: WiThunderstorm, color: '#9b59b6' },
-  99: { description: 'Thunderstorm with heavy hail', icon: WiThunderstorm, color: '#8e44ad' },
+  0: { description: 'Clear sky', icon: 'clear-day.svg' },
+  1: { description: 'Mainly clear', icon: 'clear-day.svg' },
+  2: { description: 'Partly cloudy', icon: 'partly-cloudy-day.svg' },
+  3: { description: 'Overcast', icon: 'cloudy.svg' },
+  45: { description: 'Fog', icon: 'fog.svg' },
+  48: { description: 'Depositing rime fog', icon: 'fog.svg' },
+  51: { description: 'Light drizzle', icon: 'drizzle.svg' },
+  53: { description: 'Moderate drizzle', icon: 'drizzle.svg' },
+  55: { description: 'Dense drizzle', icon: 'rain.svg' },
+  61: { description: 'Slight rain', icon: 'rain.svg' },
+  63: { description: 'Moderate rain', icon: 'rain.svg' },
+  65: { description: 'Heavy rain', icon: 'rain.svg' },
+  66: { description: 'Light freezing rain', icon: 'sleet.svg' },
+  67: { description: 'Heavy freezing rain', icon: 'sleet.svg' },
+  71: { description: 'Slight snow fall', icon: 'snow.svg' },
+  73: { description: 'Moderate snow fall', icon: 'snow.svg' },
+  75: { description: 'Heavy snow fall', icon: 'snow.svg' },
+  77: { description: 'Snow grains', icon: 'snow.svg' },
+  80: { description: 'Slight rain showers', icon: 'rain.svg' },
+  81: { description: 'Moderate rain showers', icon: 'rain.svg' },
+  82: { description: 'Violent rain showers', icon: 'rain.svg' },
+  85: { description: 'Slight snow showers', icon: 'snow.svg' },
+  86: { description: 'Heavy snow showers', icon: 'snow.svg' },
+  95: { description: 'Thunderstorm', icon: 'thunderstorms-rain.svg' },
+  96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorms-rain.svg' },
+  99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorms-rain.svg' },
 };
 
 const WeatherOverview = () => {
@@ -223,16 +211,18 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode] || {
             description: 'Unknown',
-            icon: WiDaySunny,
-            color: '#7f8c8d',
+            icon: 'clear-day.svg',
           };
-          const IconComponent = weatherInfo.icon;
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
-                <IconComponent color={weatherInfo.color} />
+                <img
+                  src={`/assets/weather-icons/${weatherInfo.icon}`}
+                  alt={weatherInfo.description}
+                  style={{ width: '64px', height: '64px' }}
+                />
               </WeatherIconContainer>
               <Temperature>
                 High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
