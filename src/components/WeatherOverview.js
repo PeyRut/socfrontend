@@ -22,7 +22,7 @@ const OverviewContainer = styled.div`
   padding: 20px;
   margin-top: 20px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px; /* Adjusted to match the width of other widgets */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 `;
 
