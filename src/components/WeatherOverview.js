@@ -22,8 +22,12 @@ const OverviewContainer = styled.div`
   padding: 20px;
   margin-top: 20px;
   width: 100%;
-  max-width: 1200px; /* Adjusted to match the width of other widgets */
+  max-width: 1200px;
+  height: 600px; /* Set to match the height of the news widget */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const OverviewHeader = styled.h2`
@@ -38,6 +42,7 @@ const ForecastGrid = styled.div`
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
   overflow: hidden;
+  flex-grow: 1; /* Ensures that the grid takes up remaining space */
 `;
 
 const ForecastCard = styled.div`
@@ -48,6 +53,9 @@ const ForecastCard = styled.div`
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &:hover {
     transform: translateY(-5px);
