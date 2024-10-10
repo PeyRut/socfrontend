@@ -102,7 +102,7 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Mapping weather codes from Open-Meteo to Weather Icons from React Icons
+// Updated mapping for weather codes to React Icons from Wi
 const weatherCodeMap = {
   0: { description: 'Clear sky', icon: WiDaySunny },
   1: { description: 'Mainly clear', icon: WiDaySunny },
@@ -111,10 +111,25 @@ const weatherCodeMap = {
   45: { description: 'Fog', icon: WiFog },
   48: { description: 'Depositing rime fog', icon: WiFog },
   51: { description: 'Light drizzle', icon: WiShowers },
-  61: { description: 'Slight rain', icon: WiRain },
+  53: { description: 'Moderate drizzle', icon: WiShowers },
+  55: { description: 'Dense drizzle', icon: WiRain },
+  61: { description: 'Slight rain', icon: WiDayCloudy },
+  63: { description: 'Moderate rain', icon: WiRain },
+  65: { description: 'Heavy rain', icon: WiShowers },
+  66: { description: 'Light freezing rain', icon: WiRain },
+  67: { description: 'Heavy freezing rain', icon: WiShowers },
   71: { description: 'Slight snow fall', icon: WiSnow },
-  80: { description: 'Rain showers', icon: WiShowers },
+  73: { description: 'Moderate snow fall', icon: WiSnow },
+  75: { description: 'Heavy snow fall', icon: WiSnow },
+  77: { description: 'Snow grains', icon: WiSnow },
+  80: { description: 'Slight rain showers', icon: WiShowers },
+  81: { description: 'Moderate rain showers', icon: WiShowers },
+  82: { description: 'Violent rain showers', icon: WiShowers },
+  85: { description: 'Slight snow showers', icon: WiSnow },
+  86: { description: 'Heavy snow showers', icon: WiSnow },
   95: { description: 'Thunderstorm', icon: WiThunderstorm },
+  96: { description: 'Thunderstorm with slight hail', icon: WiThunderstorm },
+  99: { description: 'Thunderstorm with heavy hail', icon: WiThunderstorm },
 };
 
 const WeatherOverview = () => {
@@ -164,7 +179,7 @@ const WeatherOverview = () => {
             : null,
           windSpeed: dailyData.windspeed_10m_max
             ? dailyData.windspeed_10m_max[index]
-            : null,
+            : 'No data',
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -226,7 +241,7 @@ const WeatherOverview = () => {
                   : 'N/A'}
               </Precipitation>
               <WindSpeed>
-                Wind Speed: {day.windSpeed !== null ? `${day.windSpeed} mph` : 'N/A'}
+                Wind Speed: {day.windSpeed !== 'No data' ? `${day.windSpeed} mph` : 'N/A'}
               </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
