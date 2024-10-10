@@ -23,7 +23,7 @@ const OverviewContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   max-width: 1200px;
-  height: 400px; /* Set to match the height of the news widget */
+  height: 350px; /* Set to match the height of the news widget */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
