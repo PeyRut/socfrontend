@@ -19,16 +19,16 @@ const OverviewContainer = styled.div`
   background: var(--secondary-background);
   color: var(--text-color);
   border-radius: 16px;
-  padding: 30px;
-  margin-top: 40px;
+  padding: 20px;
+  margin-top: 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 `;
 
 const OverviewHeader = styled.h2`
-  font-size: 2.5em;
-  margin-bottom: 30px;
+  font-size: 2em;
+  margin-bottom: 20px;
   text-align: center;
   color: var(--accent-color);
 `;
@@ -36,57 +36,51 @@ const OverviewHeader = styled.h2`
 const ForecastGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 20px;
+  gap: 10px;
   overflow: hidden;
 `;
 
 const ForecastCard = styled.div`
   background: var(--card-background);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 10px;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
   }
 `;
 
 const WeatherIconContainer = styled.div`
-  margin-bottom: 15px;
-  font-size: 3.5em;
+  margin-bottom: 10px;
+  font-size: 2.5em;
 `;
 
 const Day = styled.div`
-  font-size: 1.4em;
-  margin-bottom: 15px;
+  font-size: 1em;
+  margin-bottom: 5px;
   font-weight: bold;
   color: var(--accent-color);
 `;
 
 const Temperature = styled.div`
-  font-size: 1.1em;
-  margin: 10px 0;
+  font-size: 0.9em;
+  margin: 5px 0;
 `;
 
 const Precipitation = styled.div`
-  font-size: 1em;
-  margin: 10px 0;
-  color: var(--primary-color);
-`;
-
-const WindSpeed = styled.div`
-  font-size: 1em;
-  margin: 10px 0;
+  font-size: 0.8em;
+  margin: 5px 0;
   color: var(--primary-color);
 `;
 
 const Description = styled.div`
-  font-size: 1em;
-  margin-top: 10px;
+  font-size: 0.9em;
+  margin-top: 5px;
   color: var(--accent-color);
   font-weight: bold;
 `;
@@ -100,8 +94,8 @@ const Spinner = styled.div`
   border: 8px solid #f3f3f3;
   border-top: 8px solid var(--accent-color);
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   animation: ${spin} 2s linear infinite;
   margin: 0 auto;
 `;
@@ -154,7 +148,6 @@ const WeatherOverview = () => {
                 'temperature_2m_min',
                 'weathercode',
                 'precipitation_probability_max',
-                'windspeed_10m_max',
               ],
               timezone: 'America/Chicago',
             },
@@ -181,9 +174,6 @@ const WeatherOverview = () => {
           precipitationProbability: dailyData.precipitation_probability_max
             ? dailyData.precipitation_probability_max[index]
             : null,
-          windSpeed: dailyData.windspeed_10m_max
-            ? `${dailyData.windspeed_10m_max[index]} mph`
-            : 'N/A',
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -245,9 +235,6 @@ const WeatherOverview = () => {
                   ? `${day.precipitationProbability}%`
                   : 'N/A'}
               </Precipitation>
-              <WindSpeed>
-                Wind Speed: {day.windSpeed}
-              </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
