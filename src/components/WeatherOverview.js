@@ -6,35 +6,73 @@ import axios from 'axios';
 import moment from 'moment';
 
 const OverviewContainer = styled.div`
-  /* ... (same as before) */
+  background: var(--secondary-background);
+  color: var(--text-color);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
 `;
 
 const OverviewHeader = styled.h2`
-  /* ... (same as before) */
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--accent-color);
 `;
 
 const ForecastGrid = styled.div`
-  /* ... (same as before) */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  overflow: hidden;
 `;
 
 const ForecastCard = styled.div`
-  /* ... (same as before) */
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const WeatherIconContainer = styled.div`
-  /* ... (same as before) */
+  margin-bottom: 10px;
 `;
 
 const Day = styled.div`
-  /* ... (same as before) */
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--accent-color);
 `;
 
 const Temperature = styled.div`
-  /* ... (same as before) */
+  font-size: 1em;
+  margin: 8px 0;
+  font-weight: bold;
+  color: var(--text-color);
 `;
 
 const Precipitation = styled.div`
-  /* ... (same as before) */
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: var(--primary-color);
 `;
 
 const WindSpeed = styled.div`
@@ -44,18 +82,28 @@ const WindSpeed = styled.div`
 `;
 
 const Description = styled.div`
-  /* ... (same as before) */
+  font-size: 0.95em;
+  margin-top: 5px;
+  color: var(--accent-color);
+  font-style: italic;
 `;
 
 const spin = keyframes`
-  /* ... (same as before) */
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 `;
 
 const Spinner = styled.div`
-  /* ... (same as before) */
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid var(--accent-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: ${spin} 2s linear infinite;
+  margin: 0 auto;
 `;
 
-// Complete mapping for weather codes to icon file paths
+// Updated mapping for weather codes to icon file paths
 const weatherCodeMap = {
   0: { description: 'Clear sky', icon: 'clear-day.svg' },
   1: { description: 'Mainly clear', icon: 'clear-day.svg' },
@@ -95,7 +143,7 @@ const WeatherOverview = () => {
     const fetchForecast = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/weather`,
+          'https://api.open-meteo.com/v1/forecast',
           {
             params: {
               latitude: 33.1032,
@@ -105,18 +153,16 @@ const WeatherOverview = () => {
                 'temperature_2m_min',
                 'weathercode',
                 'precipitation_probability_max',
-                'windspeed_10m_max', // Corrected parameter name
+                'wind_speed_10m_max', // Corrected parameter name
               ],
               timezone: 'America/Chicago',
-              windspeed_unit: 'mph', // Corrected parameter name
+              wind_speed_unit: 'mph', // Corrected parameter name
+              temperature_unit: 'fahrenheit', // Ensure temperature is in Fahrenheit
             },
           }
         );
 
         const dailyData = response.data.daily;
-
-        // Debugging: Log daily data
-        console.log('Daily Data:', dailyData);
 
         if (!dailyData || !dailyData.time) {
           throw new Error('Invalid daily data structure in API response.');
@@ -127,9 +173,6 @@ const WeatherOverview = () => {
           const weatherCode = dailyData.weathercode
             ? parseInt(dailyData.weathercode[index], 10)
             : null;
-
-          // Debugging: Log weather code
-          console.log(`Weather code for ${date}:`, weatherCode);
 
           return {
             date,
@@ -143,8 +186,8 @@ const WeatherOverview = () => {
             precipitationProbability: dailyData.precipitation_probability_max
               ? dailyData.precipitation_probability_max[index]
               : null,
-            windSpeed: dailyData.windspeed_10m_max
-              ? dailyData.windspeed_10m_max[index]
+            windSpeed: dailyData.wind_speed_10m_max
+              ? dailyData.wind_speed_10m_max[index]
               : null,
           };
         });
@@ -187,9 +230,6 @@ const WeatherOverview = () => {
           const date = moment(day.date);
           const weatherInfo = weatherCodeMap[day.weatherCode];
 
-          // Debugging: Log weather info
-          console.log(`Weather info for ${date.format('YYYY-MM-DD')}:`, weatherInfo);
-
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
@@ -203,9 +243,11 @@ const WeatherOverview = () => {
                 />
               </WeatherIconContainer>
               <Temperature>
-                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                High:{' '}
+                {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
-                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
+                Low:{' '}
+                {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <Precipitation>
                 Precipitation:{' '}
@@ -215,7 +257,9 @@ const WeatherOverview = () => {
               </Precipitation>
               <WindSpeed>
                 Wind Speed:{' '}
-                {day.windSpeed !== null ? `${Math.round(day.windSpeed)} mph` : 'N/A'}
+                {day.windSpeed !== null
+                  ? `${Math.round(day.windSpeed)} mph`
+                  : 'N/A'}
               </WindSpeed>
               <Description>
                 {weatherInfo ? weatherInfo.description : 'Unknown'}
