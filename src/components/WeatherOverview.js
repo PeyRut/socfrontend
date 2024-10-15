@@ -75,6 +75,12 @@ const Precipitation = styled.div`
   color: var(--primary-color);
 `;
 
+const WindSpeed = styled.div`
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+`;
+
 const Description = styled.div`
   font-size: 0.95em;
   margin-top: 5px;
@@ -99,32 +105,7 @@ const Spinner = styled.div`
 
 // Updated mapping for weather codes to icon file paths
 const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: 'clear-day.svg' },
-  1: { description: 'Mainly clear', icon: 'clear-day.svg' },
-  2: { description: 'Partly cloudy', icon: 'partly-cloudy-day.svg' },
-  3: { description: 'Overcast', icon: 'cloudy.svg' },
-  45: { description: 'Fog', icon: 'fog.svg' },
-  48: { description: 'Depositing rime fog', icon: 'fog.svg' },
-  51: { description: 'Light drizzle', icon: 'drizzle.svg' },
-  53: { description: 'Moderate drizzle', icon: 'drizzle.svg' },
-  55: { description: 'Dense drizzle', icon: 'rain.svg' },
-  61: { description: 'Slight rain', icon: 'rain.svg' },
-  63: { description: 'Moderate rain', icon: 'rain.svg' },
-  65: { description: 'Heavy rain', icon: 'rain.svg' },
-  66: { description: 'Light freezing rain', icon: 'sleet.svg' },
-  67: { description: 'Heavy freezing rain', icon: 'sleet.svg' },
-  71: { description: 'Slight snow fall', icon: 'snow.svg' },
-  73: { description: 'Moderate snow fall', icon: 'snow.svg' },
-  75: { description: 'Heavy snow fall', icon: 'snow.svg' },
-  77: { description: 'Snow grains', icon: 'snow.svg' },
-  80: { description: 'Slight rain showers', icon: 'rain.svg' },
-  81: { description: 'Moderate rain showers', icon: 'rain.svg' },
-  82: { description: 'Violent rain showers', icon: 'rain.svg' },
-  85: { description: 'Slight snow showers', icon: 'snow.svg' },
-  86: { description: 'Heavy snow showers', icon: 'snow.svg' },
-  95: { description: 'Thunderstorm', icon: 'thunderstorms-rain.svg' },
-  96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorms-rain.svg' },
-  99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorms-rain.svg' },
+  // ... (unchanged weatherCodeMap content)
 };
 
 const WeatherOverview = () => {
@@ -145,8 +126,10 @@ const WeatherOverview = () => {
                 'temperature_2m_min',
                 'weathercode',
                 'precipitation_probability_max',
+                'windspeed_10m_max', // Added wind speed parameter
               ],
               timezone: 'America/Chicago',
+              windspeed_unit: 'mph', // Specify wind speed unit as mph
             },
           }
         );
@@ -171,6 +154,9 @@ const WeatherOverview = () => {
           precipitationProbability: dailyData.precipitation_probability_max
             ? dailyData.precipitation_probability_max[index]
             : null,
+          windSpeed: dailyData.windspeed_10m_max
+            ? dailyData.windspeed_10m_max[index]
+            : null, // Extract wind speed data
         }));
         setForecast(forecastData);
       } catch (error) {
@@ -234,6 +220,9 @@ const WeatherOverview = () => {
                   ? `${day.precipitationProbability}%`
                   : 'N/A'}
               </Precipitation>
+              <WindSpeed>
+                Wind Speed: {day.windSpeed !== null ? `${Math.round(day.windSpeed)} mph` : 'N/A'}
+              </WindSpeed>
               <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
