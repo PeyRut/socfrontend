@@ -11,7 +11,7 @@ const NewsContainer = styled.div`
   color: var(--text-color);
   border-radius: 12px;
   padding: 20px;
-  height: 582px;
+  height: 600px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   border: none;
