@@ -252,7 +252,7 @@ const WeatherOverview = () => {
               </Temperature>
               <InfoRow>
                 <InfoIcon
-                  src={require('../assets/icons/raindrops.svg')}
+                  src={require('../assets/weather-icons/raindrops.svg')}
                   alt="Precipitation"
                 />
                 {day.precipitationProbability !== null
@@ -261,7 +261,7 @@ const WeatherOverview = () => {
               </InfoRow>
               <InfoRow>
                 <InfoIcon
-                  src={require('../assets/icons/wind.svg')}
+                  src={require('../assets/weather-icons/wind.svg')}
                   alt="Wind Speed"
                 />
                 {day.windSpeed !== null
