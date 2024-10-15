@@ -97,6 +97,7 @@ const InfoIcon = styled.div`
   svg {
     width: 100%;
     height: 100%;
+    fill: white; /* Set SVG fill color to white */
   }
 `;
 
@@ -117,10 +118,59 @@ const Spinner = styled.div`
 
 // Updated mapping for weather codes to icon file paths
 const weatherCodeMap = {
-  // ... (include your existing weatherCodeMap content here)
+  // Clear sky
   0: { description: 'Clear sky', icon: 'clear-day.svg' },
+
+  // Mainly clear, partly cloudy, and overcast
   1: { description: 'Mainly clear', icon: 'clear-day.svg' },
-  // ... (rest of the weather codes)
+  2: { description: 'Partly cloudy', icon: 'partly-cloudy-day.svg' },
+  3: { description: 'Overcast', icon: 'cloudy.svg' },
+
+  // Fog and depositing rime fog
+  45: { description: 'Fog', icon: 'fog.svg' },
+  48: { description: 'Depositing rime fog', icon: 'fog.svg' },
+
+  // Drizzle: Light, moderate, and dense intensity
+  51: { description: 'Light drizzle', icon: 'drizzle.svg' },
+  53: { description: 'Moderate drizzle', icon: 'drizzle.svg' },
+  55: { description: 'Dense drizzle', icon: 'drizzle.svg' },
+
+  // Freezing Drizzle: Light and dense intensity
+  56: { description: 'Light freezing drizzle', icon: 'sleet.svg' },
+  57: { description: 'Dense freezing drizzle', icon: 'sleet.svg' },
+
+  // Rain: Slight, moderate and heavy intensity
+  61: { description: 'Slight rain', icon: 'rain.svg' },
+  63: { description: 'Moderate rain', icon: 'rain.svg' },
+  65: { description: 'Heavy rain', icon: 'rain.svg' },
+
+  // Freezing Rain: Light and heavy intensity
+  66: { description: 'Light freezing rain', icon: 'sleet.svg' },
+  67: { description: 'Heavy freezing rain', icon: 'sleet.svg' },
+
+  // Snow fall: Slight, moderate, and heavy intensity
+  71: { description: 'Slight snowfall', icon: 'snow.svg' },
+  73: { description: 'Moderate snowfall', icon: 'snow.svg' },
+  75: { description: 'Heavy snowfall', icon: 'snow.svg' },
+
+  // Snow grains
+  77: { description: 'Snow grains', icon: 'snow.svg' },
+
+  // Rain showers: Slight, moderate, and violent
+  80: { description: 'Slight rain showers', icon: 'rain.svg' },
+  81: { description: 'Moderate rain showers', icon: 'rain.svg' },
+  82: { description: 'Violent rain showers', icon: 'rain.svg' },
+
+  // Snow showers slight and heavy
+  85: { description: 'Slight snow showers', icon: 'snow-showers.svg' },
+  86: { description: 'Heavy snow showers', icon: 'snow-showers.svg' },
+
+  // Thunderstorm: Slight or moderate
+  95: { description: 'Thunderstorm', icon: 'thunderstorms.svg' },
+
+  // Thunderstorm with slight and heavy hail
+  96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorms-rain.svg' },
+  99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorms-rain.svg' },
 };
 
 const WeatherOverview = () => {
@@ -215,26 +265,25 @@ const WeatherOverview = () => {
         {forecast.map((day, index) => {
           if (!day) return null;
           const date = moment(day.date);
-          const weatherInfo = weatherCodeMap[day.weatherCode];
+          const weatherInfo = weatherCodeMap[day.weatherCode] || {
+            description: `Unknown weather code: ${day.weatherCode}`,
+            icon: 'unknown.svg',
+          };
 
           return (
             <ForecastCard key={index}>
               <Day>{date.format('ddd, MMM D')}</Day>
               <WeatherIconContainer>
                 <img
-                  src={require(`../assets/weather-icons/${
-                    weatherInfo ? weatherInfo.icon : 'clear-day.svg'
-                  }`)}
-                  alt={weatherInfo ? weatherInfo.description : 'Unknown'}
+                  src={require(`../assets/weather-icons/${weatherInfo.icon}`)}
+                  alt={weatherInfo.description}
                   style={{ width: '64px', height: '64px' }}
                 />
               </WeatherIconContainer>
               <Temperature>
-                High:{' '}
-                {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
-                Low:{' '}
-                {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
+                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <InfoRow>
                 <InfoIcon>
@@ -252,9 +301,7 @@ const WeatherOverview = () => {
                   ? `${Math.round(day.windSpeed)} mph`
                   : 'N/A'}
               </InfoRow>
-              <Description>
-                {weatherInfo ? weatherInfo.description : 'Unknown'}
-              </Description>
+              <Description>{weatherInfo.description}</Description>
             </ForecastCard>
           );
         })}
