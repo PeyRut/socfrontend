@@ -82,6 +82,7 @@ const InfoRow = styled.div`
   font-size: 0.9em;
   margin-bottom: 5px;
   color: var(--primary-color);
+  justify-content: center;
 `;
 
 const InfoIcon = styled.img`
@@ -244,15 +245,13 @@ const WeatherOverview = () => {
                 />
               </WeatherIconContainer>
               <Temperature>
-                High:{' '}
-                {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
+                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
                 <br />
-                Low:{' '}
-                {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
+                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
               <InfoRow>
                 <InfoIcon
-                  src={require('../assets/weather-icons/raindrops.svg')}
+                  src={require(`../assets/weather-icons/raindrops.svg`)}
                   alt="Precipitation"
                 />
                 {day.precipitationProbability !== null
@@ -261,7 +260,7 @@ const WeatherOverview = () => {
               </InfoRow>
               <InfoRow>
                 <InfoIcon
-                  src={require('../assets/weather-icons/wind.svg')}
+                  src={require(`../assets/weather-icons/wind.svg`)}
                   alt="Wind Speed"
                 />
                 {day.windSpeed !== null
