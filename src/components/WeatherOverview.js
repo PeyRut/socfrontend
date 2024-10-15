@@ -69,23 +69,25 @@ const Temperature = styled.div`
   color: var(--text-color);
 `;
 
-const Precipitation = styled.div`
-  font-size: 0.9em;
-  margin-bottom: 5px;
-  color: var(--primary-color);
-`;
-
-const WindSpeed = styled.div`
-  font-size: 0.9em;
-  margin-bottom: 5px;
-  color: var(--primary-color);
-`;
-
 const Description = styled.div`
   font-size: 0.95em;
   margin-top: 5px;
   color: var(--accent-color);
   font-style: italic;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+`;
+
+const InfoIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
 `;
 
 const spin = keyframes`
@@ -153,11 +155,11 @@ const WeatherOverview = () => {
                 'temperature_2m_min',
                 'weathercode',
                 'precipitation_probability_max',
-                'wind_speed_10m_max', // Corrected parameter name
+                'wind_speed_10m_max',
               ],
               timezone: 'America/Chicago',
-              wind_speed_unit: 'mph', // Corrected parameter name
-              temperature_unit: 'fahrenheit', // Ensure temperature is in Fahrenheit
+              wind_speed_unit: 'mph',
+              temperature_unit: 'fahrenheit',
             },
           }
         );
@@ -169,7 +171,6 @@ const WeatherOverview = () => {
         }
 
         const forecastData = dailyData.time.map((date, index) => {
-          // Convert weather code to integer to match the keys in weatherCodeMap
           const weatherCode = dailyData.weathercode
             ? parseInt(dailyData.weathercode[index], 10)
             : null;
@@ -249,18 +250,24 @@ const WeatherOverview = () => {
                 Low:{' '}
                 {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
               </Temperature>
-              <Precipitation>
-                Precipitation:{' '}
+              <InfoRow>
+                <InfoIcon
+                  src={require('../assets/icons/raindrops.svg')}
+                  alt="Precipitation"
+                />
                 {day.precipitationProbability !== null
                   ? `${day.precipitationProbability}%`
                   : 'N/A'}
-              </Precipitation>
-              <WindSpeed>
-                Wind Speed:{' '}
+              </InfoRow>
+              <InfoRow>
+                <InfoIcon
+                  src={require('../assets/icons/wind.svg')}
+                  alt="Wind Speed"
+                />
                 {day.windSpeed !== null
                   ? `${Math.round(day.windSpeed)} mph`
                   : 'N/A'}
-              </WindSpeed>
+              </InfoRow>
               <Description>
                 {weatherInfo ? weatherInfo.description : 'Unknown'}
               </Description>
