@@ -4,12 +4,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Player } from '@lottiefiles/react-lottie-player'; // Import Lottie Player
 
-// Lottie animation JSON files
-import ThreatHunterAnimation from '../assets/threat-hunter.json';
-import ManagerAnimation from '../assets/manager.json';
-import TechDeskAnimation from '../assets/tech-desk.json';
-import WfhAnimation from '../assets/wfh-week.json';
-
 const Card = styled.div`
   background: var(--card-background);
   border-radius: 16px;
@@ -47,11 +41,12 @@ const EmployeeName = styled.p`
 `;
 
 const RoleCard = ({ role, employee }) => {
+  // Map roles to Lottie animation URLs
   const roleAnimations = {
-    "Threat Hunter": ThreatHunterAnimation,
-    "Threat Hunter Manager": ManagerAnimation,
-    "Tech Desk": TechDeskAnimation,
-    "Threat Intel (WFH Week)": WfhAnimation,
+    "Threat Hunter": "https://assets5.lottiefiles.com/packages/lf20_a2chheio.json", // Replace with your preferred animation URL
+    "Threat Hunter Manager": "https://assets7.lottiefiles.com/packages/lf20_ql1tzszc.json",
+    "Tech Desk": "https://assets10.lottiefiles.com/packages/lf20_dyccqmtu.json",
+    "Threat Intel (WFH Week)": "https://assets4.lottiefiles.com/private_files/lf30_rnuxhxzr.json"
   };
 
   return (
@@ -60,7 +55,7 @@ const RoleCard = ({ role, employee }) => {
         <Player
           autoplay
           loop
-          src={roleAnimations[role]} // Load the correct animation based on the role
+          src={roleAnimations[role]} // Load animation directly from the URL
           style={{ height: '80px', width: '80px' }}
         />
       </RoleIcon>
