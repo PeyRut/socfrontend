@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GrUserManager, GrDocumentThreat } from 'react-icons/gr';
 import { FaTools } from 'react-icons/fa';
-import { GiEvilEyes } from 'react-icons/gi';
+import { SiGooglebigquery } from 'react-icons/si';
 
 const Card = styled.div`
   background: var(--card-background);
@@ -46,7 +46,7 @@ const EmployeeName = styled.p`
 
 const RoleCard = ({ role, employee }) => {
   const roleIcons = {
-    "Threat Hunter": <GiEvilEyes />,
+    "Threat Hunter": <SiGooglebigquery />,
     "Threat Hunter Manager": <GrUserManager />,
     "Tech Desk": <FaTools />,
     "Threat Intel (WFH Week)": <GrDocumentThreat />
