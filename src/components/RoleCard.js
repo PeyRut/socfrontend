@@ -2,7 +2,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Player } from '@lottiefiles/react-lottie-player'; // Import Lottie Player
+import { GrUserManager, GrDocumentThreat } from 'react-icons/gr';
+import { FaTools } from 'react-icons/fa';
+import { GiEvilEyes } from 'react-icons/gi';
 
 const Card = styled.div`
   background: var(--card-background);
@@ -18,7 +20,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
+  
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
@@ -26,7 +28,9 @@ const Card = styled.div`
 `;
 
 const RoleIcon = styled.div`
+  font-size: 2.5em;
   margin-bottom: 15px;
+  color: var(--accent-color);
 `;
 
 const RoleName = styled.h2`
@@ -41,24 +45,16 @@ const EmployeeName = styled.p`
 `;
 
 const RoleCard = ({ role, employee }) => {
-  // Map roles to Lottie animation URLs
-  const roleAnimations = {
-    "Threat Hunter": "https://assets5.lottiefiles.com/packages/lf20_a2chheio.json", // Replace with your preferred animation URL
-    "Threat Hunter Manager": "https://assets7.lottiefiles.com/packages/lf20_ql1tzszc.json",
-    "Tech Desk": "https://assets10.lottiefiles.com/packages/lf20_dyccqmtu.json",
-    "Threat Intel (WFH Week)": "https://assets4.lottiefiles.com/private_files/lf30_rnuxhxzr.json"
+  const roleIcons = {
+    "Threat Hunter": <GiEvilEyes />,
+    "Threat Hunter Manager": <GrUserManager />,
+    "Tech Desk": <FaTools />,
+    "Threat Intel (WFH Week)": <GrDocumentThreat />
   };
 
   return (
     <Card onClick={() => alert(`More details about ${employee}`)}>
-      <RoleIcon>
-        <Player
-          autoplay
-          loop
-          src={roleAnimations[role]} // Load animation directly from the URL
-          style={{ height: '80px', width: '80px' }}
-        />
-      </RoleIcon>
+      <RoleIcon>{roleIcons[role]}</RoleIcon>
       <RoleName>{role}</RoleName>
       <EmployeeName>{employee}</EmployeeName>
     </Card>
