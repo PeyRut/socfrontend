@@ -2,7 +2,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { FaTools, GiEvilEyes, GrUserManager, GrDocumentThreat } from 'react-icons/fa';
+import { GrUserManager, GrDocumentThreat } from 'react-icons/gr';
+import { FaTools } from 'react-icons/fa';
+import { GiEvilEyes } from 'react-icons/gi';
 
 const Card = styled.div`
   background: var(--card-background);
