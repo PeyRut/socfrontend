@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { FaSearch, FaUserShield, FaHeadset, FaRegClock } from 'react-icons/fa';
+import { FaTools, GiEvilEyes, GrUserManager, GrDocumentThreat } from 'react-icons/fa';
 
 const Card = styled.div`
   background: var(--card-background);
@@ -44,10 +44,10 @@ const EmployeeName = styled.p`
 
 const RoleCard = ({ role, employee }) => {
   const roleIcons = {
-    "Threat Hunter": <FaSearch />,
-    "Threat Hunter Manager": <FaUserShield />,
-    "Tech Desk": <FaHeadset />,
-    "Threat Intel (WFH Week)": <FaRegClock />
+    "Threat Hunter": <GiEvilEyes />,
+    "Threat Hunter Manager": <GrUserManager />,
+    "Tech Desk": <FaTools />,
+    "Threat Intel (WFH Week)": <GrDocumentThreat />
   };
 
   return (
