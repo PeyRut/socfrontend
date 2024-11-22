@@ -82,8 +82,8 @@ const Dashboard = () => {
     return {
       "Threat Hunter": rotation[0],
       "Threat Hunter Manager": rotation[1],
-      "On-Call (Tech Desk)": rotation[2],
-      "Standby (Off Thurs-Fri)": rotation[3]
+      "Tech Desk": rotation[2],
+      "Threat Intel (WFH Week)": rotation[3]
     };
   };
 
@@ -96,8 +96,8 @@ const Dashboard = () => {
   const roleAssignments = [
     { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
     { role: "Threat Hunter Manager", employee: rotation["Threat Hunter Manager"] },
-    { role: "On-Call (Tech Desk)", employee: rotation["On-Call (Tech Desk)"] },
-    { role: "Standby (Off Thurs-Fri)", employee: rotation["Standby (Off Thurs-Fri)"] }
+    { role: "Tech Desk", employee: rotation["Tech Desk"] },
+    { role: "Threat Intel (WFH Week)", employee: rotation["Threat Intel (WFH Week)"] }
   ];
 
   return (
