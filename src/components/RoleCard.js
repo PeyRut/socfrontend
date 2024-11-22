@@ -46,8 +46,8 @@ const RoleCard = ({ role, employee }) => {
   const roleIcons = {
     "Threat Hunter": <FaSearch />,
     "Threat Hunter Manager": <FaUserShield />,
-    "Tech Desk": <FaHeadset />,
-    "Threat Intel (WFH Week)": <FaRegClock />
+    "On-Call (Tech Desk)": <FaHeadset />,
+    "Standby (Off Thurs-Fri)": <FaRegClock />
   };
 
   return (
