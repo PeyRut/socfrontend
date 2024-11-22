@@ -125,8 +125,8 @@ const CalendarView = () => {
     return {
       "Threat Hunter": rotation[0],
       "Threat Hunter Manager": rotation[1],
-      "On-Call (Tech Desk)": rotation[2],
-      "Standby (Off Thurs-Fri)": rotation[3]
+      "Tech Desk": rotation[2],
+      "Threat Intel (WFH Week)": rotation[3]
     };
   };
 
