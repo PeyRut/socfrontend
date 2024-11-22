@@ -2,9 +2,13 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { GrUserManager, GrDocumentThreat } from 'react-icons/gr';
-import { FaTools } from 'react-icons/fa';
-import { GiEvilEyes } from 'react-icons/gi';
+import { Player } from '@lottiefiles/react-lottie-player'; // Import Lottie Player
+
+// Lottie animation JSON files
+import ThreatHunterAnimation from '../assets/threat-hunter.json';
+import ManagerAnimation from '../assets/manager.json';
+import TechDeskAnimation from '../assets/tech-desk.json';
+import WfhAnimation from '../assets/wfh-week.json';
 
 const Card = styled.div`
   background: var(--card-background);
@@ -20,7 +24,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
@@ -28,9 +32,7 @@ const Card = styled.div`
 `;
 
 const RoleIcon = styled.div`
-  font-size: 2.5em;
   margin-bottom: 15px;
-  color: var(--accent-color);
 `;
 
 const RoleName = styled.h2`
@@ -45,16 +47,23 @@ const EmployeeName = styled.p`
 `;
 
 const RoleCard = ({ role, employee }) => {
-  const roleIcons = {
-    "Threat Hunter": <GiEvilEyes />,
-    "Threat Hunter Manager": <GrUserManager />,
-    "Tech Desk": <FaTools />,
-    "Threat Intel (WFH Week)": <GrDocumentThreat />
+  const roleAnimations = {
+    "Threat Hunter": ThreatHunterAnimation,
+    "Threat Hunter Manager": ManagerAnimation,
+    "Tech Desk": TechDeskAnimation,
+    "Threat Intel (WFH Week)": WfhAnimation,
   };
 
   return (
     <Card onClick={() => alert(`More details about ${employee}`)}>
-      <RoleIcon>{roleIcons[role]}</RoleIcon>
+      <RoleIcon>
+        <Player
+          autoplay
+          loop
+          src={roleAnimations[role]} // Load the correct animation based on the role
+          style={{ height: '80px', width: '80px' }}
+        />
+      </RoleIcon>
       <RoleName>{role}</RoleName>
       <EmployeeName>{employee}</EmployeeName>
     </Card>
