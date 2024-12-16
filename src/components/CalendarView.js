@@ -124,7 +124,7 @@ const CalendarView = () => {
     const rotation = rotations[(week - 1) % 4];
     return {
       "Threat Hunter": rotation[0],
-      "Threat Hunter Manager": rotation[1],
+      "Threat Hunter": rotation[1],
       "Tech Desk": rotation[2],
       "Threat Intel (WFH Week)": rotation[3]
     };
