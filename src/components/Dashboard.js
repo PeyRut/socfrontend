@@ -81,7 +81,7 @@ const Dashboard = () => {
     const rotation = rotations[(week - 1) % 4];
     return {
       "Threat Hunter": rotation[0],
-      "Threat Hunter Manager": rotation[1],
+      "Threat Hunter PT2": rotation[1],
       "Tech Desk": rotation[2],
       "Threat Intel (WFH Week)": rotation[3]
     };
@@ -95,7 +95,7 @@ const Dashboard = () => {
   // Create role assignments
   const roleAssignments = [
     { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
-    { role: "Threat Hunter Manager", employee: rotation["Threat Hunter Manager"] },
+    { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
     { role: "Tech Desk", employee: rotation["Tech Desk"] },
     { role: "Threat Intel (WFH Week)", employee: rotation["Threat Intel (WFH Week)"] }
   ];
