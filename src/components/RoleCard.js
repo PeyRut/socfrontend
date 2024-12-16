@@ -47,7 +47,7 @@ const EmployeeName = styled.p`
 const RoleCard = ({ role, employee }) => {
   const roleIcons = {
     "Threat Hunter": <SiGooglebigquery />,
-    "Threat Hunter": <SiGooglebigquery />,
+    "Threat Hunter PT2": <SiGooglebigquery />,
     "Tech Desk": <FaTools />,
     "Threat Intel (WFH Week)": <GrDocumentThreat />
   };
