@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { GrUserManager, GrDocumentThreat } from 'react-icons/gr';
+import { GrDocumentThreat } from 'react-icons/gr';
 import { FaTools } from 'react-icons/fa';
 import { SiGooglebigquery } from 'react-icons/si';
 
