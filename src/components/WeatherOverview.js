@@ -9,6 +9,7 @@ import moment from 'moment';
 import { ReactComponent as RaindropsIcon } from '../assets/weather-icons/raindrops.svg';
 import { ReactComponent as WindIcon } from '../assets/weather-icons/wind.svg';
 
+// All your original styled components remain exactly the same
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
   color: var(--text-color);
@@ -97,7 +98,7 @@ const InfoIcon = styled.div`
   svg {
     width: 100%;
     height: 100%;
-    fill: white; /* Set SVG fill color to white */
+    fill: white;
   }
 `;
 
@@ -116,59 +117,34 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Updated mapping for weather codes to icon file paths
+// Your original weather code mapping remains exactly the same
 const weatherCodeMap = {
-  // Clear sky
   0: { description: 'Clear sky', icon: 'clear-day.svg' },
-
-  // Mainly clear, partly cloudy, and overcast
   1: { description: 'Mainly clear', icon: 'clear-day.svg' },
   2: { description: 'Partly cloudy', icon: 'partly-cloudy-day.svg' },
   3: { description: 'Overcast', icon: 'cloudy.svg' },
-
-  // Fog and depositing rime fog
   45: { description: 'Fog', icon: 'fog.svg' },
   48: { description: 'Depositing rime fog', icon: 'fog.svg' },
-
-  // Drizzle: Light, moderate, and dense intensity
   51: { description: 'Light drizzle', icon: 'drizzle.svg' },
   53: { description: 'Moderate drizzle', icon: 'drizzle.svg' },
   55: { description: 'Dense drizzle', icon: 'drizzle.svg' },
-
-  // Freezing Drizzle: Light and dense intensity
   56: { description: 'Light freezing drizzle', icon: 'sleet.svg' },
   57: { description: 'Dense freezing drizzle', icon: 'sleet.svg' },
-
-  // Rain: Slight, moderate and heavy intensity
   61: { description: 'Slight rain', icon: 'rain.svg' },
   63: { description: 'Moderate rain', icon: 'rain.svg' },
   65: { description: 'Heavy rain', icon: 'rain.svg' },
-
-  // Freezing Rain: Light and heavy intensity
   66: { description: 'Light freezing rain', icon: 'sleet.svg' },
   67: { description: 'Heavy freezing rain', icon: 'sleet.svg' },
-
-  // Snow fall: Slight, moderate, and heavy intensity
   71: { description: 'Slight snowfall', icon: 'snow.svg' },
   73: { description: 'Moderate snowfall', icon: 'snow.svg' },
   75: { description: 'Heavy snowfall', icon: 'snow.svg' },
-
-  // Snow grains
   77: { description: 'Snow grains', icon: 'snow.svg' },
-
-  // Rain showers: Slight, moderate, and violent
   80: { description: 'Slight rain showers', icon: 'rain.svg' },
   81: { description: 'Moderate rain showers', icon: 'rain.svg' },
   82: { description: 'Violent rain showers', icon: 'rain.svg' },
-
-  // Snow showers slight and heavy
   85: { description: 'Slight snow showers', icon: 'snow-showers.svg' },
   86: { description: 'Heavy snow showers', icon: 'snow-showers.svg' },
-
-  // Thunderstorm: Slight or moderate
   95: { description: 'Thunderstorm', icon: 'thunderstorms.svg' },
-
-  // Thunderstorm with slight and heavy hail
   96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorms-rain.svg' },
   99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorms-rain.svg' },
 };
@@ -180,64 +156,44 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        const response = await axios.get(
-          'https://api.open-meteo.com/v1/forecast',
-          {
-            params: {
-              latitude: 33.1032,
-              longitude: -96.6706,
-              daily: [
-                'temperature_2m_max',
-                'temperature_2m_min',
-                'weathercode',
-                'precipitation_probability_max',
-                'wind_speed_10m_max',
-              ],
-              timezone: 'America/Chicago',
-              wind_speed_unit: 'mph',
-              temperature_unit: 'fahrenheit',
-            },
-          }
-        );
+        // Create the URL with all parameters explicitly set
+        const url = new URL('https://api.open-meteo.com/v1/forecast');
+        url.search = new URLSearchParams({
+          latitude: '33.1032',
+          longitude: '-96.6706',
+          daily: 'temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max,wind_speed_10m_max',
+          timezone: 'America/Chicago',
+          wind_speed_unit: 'mph',
+          temperature_unit: 'fahrenheit'
+        }).toString();
 
-        const dailyData = response.data.daily;
-
-        if (!dailyData || !dailyData.time) {
-          throw new Error('Invalid daily data structure in API response.');
+        const response = await axios.get(url.toString());
+        
+        if (!response.data || !response.data.daily || !response.data.daily.time) {
+          throw new Error('Invalid data structure in API response');
         }
 
-        const forecastData = dailyData.time.map((date, index) => {
-          const weatherCode = dailyData.weathercode
-            ? parseInt(dailyData.weathercode[index], 10)
-            : null;
+        const dailyData = response.data.daily;
+        const forecastData = dailyData.time.map((date, index) => ({
+          date,
+          maxTemp: dailyData.temperature_2m_max[index],
+          minTemp: dailyData.temperature_2m_min[index],
+          weatherCode: dailyData.weathercode[index],
+          precipitationProbability: dailyData.precipitation_probability_max[index],
+          windSpeed: dailyData.wind_speed_10m_max[index]
+        }));
 
-          return {
-            date,
-            maxTemp: dailyData.temperature_2m_max
-              ? dailyData.temperature_2m_max[index]
-              : null,
-            minTemp: dailyData.temperature_2m_min
-              ? dailyData.temperature_2m_min[index]
-              : null,
-            weatherCode,
-            precipitationProbability: dailyData.precipitation_probability_max
-              ? dailyData.precipitation_probability_max[index]
-              : null,
-            windSpeed: dailyData.wind_speed_10m_max
-              ? dailyData.wind_speed_10m_max[index]
-              : null,
-          };
-        });
         setForecast(forecastData);
       } catch (error) {
         console.error('Error fetching weather forecast:', error);
-        setError('Failed to fetch weather data.');
+        setError('Failed to fetch weather data. Please try again later.');
       }
     };
 
     fetchForecast();
   }, []);
 
+  // Rest of your component remains exactly the same
   if (error) {
     return (
       <OverviewContainer>
