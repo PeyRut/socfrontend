@@ -41,6 +41,7 @@ const RightSection = styled.div`
   flex-direction: column;
   align-items: stretch;
   padding: 0;
+  margin-top: 200px; // or any value you like
   margin-left: 20px;
   border-left: none;
   height: 100%;
