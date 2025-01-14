@@ -58,11 +58,18 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
+/* 
+   This container holds the navigation buttons and date range.
+   We set a max-width that roughly matches the width of the
+   role cards, and center it to keep everything aligned.
+*/
 const WeekSelectorContainer = styled.div`
+  width: 100%;
+  max-width: 750px; 
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
 `;
 
 const ButtonGroup = styled.div`
@@ -221,7 +228,7 @@ const Dashboard = () => {
     .clone()
     .endOf("isoWeek")
     .format("MMM D, YYYY");
-  const displayedWeekLabel = `Week ${selectedWeek}: ${displayedWeekStart} - ${displayedWeekEnd}`;
+  const displayedWeekLabel = `${displayedWeekStart} - ${displayedWeekEnd}`;
 
   return (
     <DashboardContainer>
