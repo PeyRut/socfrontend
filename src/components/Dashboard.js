@@ -58,11 +58,16 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
-const WeekSelector = styled.div`
+const WeekSelectorContainer = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
 `;
 
 const WeekButton = styled.button`
@@ -77,6 +82,12 @@ const WeekButton = styled.button`
   &:hover {
     background: var(--hover-accent);
   }
+`;
+
+const WeekRangeText = styled.span`
+  font-size: 1.1em;
+  color: var(--accent-color);
+  font-weight: 600;
 `;
 
 const Dashboard = () => {
@@ -202,16 +213,29 @@ const Dashboard = () => {
     setSelectedWeek((prev) => prev + 1);
   };
 
+  const displayedWeekStart = displayedDate
+    .clone()
+    .startOf("isoWeek")
+    .format("MMM D, YYYY");
+  const displayedWeekEnd = displayedDate
+    .clone()
+    .endOf("isoWeek")
+    .format("MMM D, YYYY");
+  const displayedWeekLabel = `Week ${selectedWeek}: ${displayedWeekStart} - ${displayedWeekEnd}`;
+
   return (
     <DashboardContainer>
       <Navbar />
       <Header />
       <MainContent>
         <LeftSection>
-          <WeekSelector>
-            <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
-            <WeekButton onClick={handleNextWeek}>Next Week</WeekButton>
-          </WeekSelector>
+          <WeekSelectorContainer>
+            <ButtonGroup>
+              <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
+              <WeekButton onClick={handleNextWeek}>Next Week</WeekButton>
+            </ButtonGroup>
+            <WeekRangeText>{displayedWeekLabel}</WeekRangeText>
+          </WeekSelectorContainer>
           <RolesSection>
             {displayedRoleAssignments.map((assignment, index) => (
               <RoleCard key={index} role={assignment.role} employee={assignment.employee} />
