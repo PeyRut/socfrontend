@@ -70,35 +70,74 @@ const RolesSection = styled.section`
 `;
 
 const Dashboard = () => {
-  // Rotation logic matching the Python script
-  const getRotation = (week) => {
-    const rotations = [
-      ["Willis", "Jordan", "Randy", "Peyton"],
-      ["Peyton", "Willis", "Jordan", "Randy"],
-      ["Randy", "Peyton", "Willis", "Jordan"],
-      ["Jordan", "Randy", "Peyton", "Willis"]
-    ];
-    const rotation = rotations[(week - 1) % 4];
-    return {
-      "Threat Hunter": rotation[0],
-      "Threat Hunter PT2": rotation[1],
-      "Tech Desk": rotation[2],
-      "Threat Intel (WFH Week)": rotation[3]
-    };
-  };
+  // Define remote start/end dates for Willis
+  const remoteStart = moment("2025-01-27", "YYYY-MM-DD");
+  const remoteEnd = moment("2025-04-14", "YYYY-MM-DD");
 
-  // Get current week number
+  // Get current date and week number
   const currentDate = moment();
   const currentWeekNumber = currentDate.isoWeek();
+
+  // Check if current date is within the remote window
+  const isRemotePeriod = currentDate.isSameOrAfter(remoteStart, 'day') && currentDate.isBefore(remoteEnd, 'day');
+
+  // ORIGINAL (4-week) rotation logic
+  const standardRotations = [
+    ["Willis", "Jordan", "Randy", "Peyton"],
+    ["Peyton", "Willis", "Jordan", "Randy"],
+    ["Randy", "Peyton", "Willis", "Jordan"],
+    ["Jordan", "Randy", "Peyton", "Willis"]
+  ];
+
+  // NEW (3-week) rotation logic for onsite roles while Willis is remote
+  //   Week 1: Peyton (TH) / Jordan (TH PT2) / Randy (Tech Desk)
+  //   Week 2: Randy (TH) / Peyton (TH PT2) / Jordan (Tech Desk)
+  //   Week 3: Jordan (TH) / Randy (TH PT2) / Peyton (Tech Desk)
+  const remoteRotations = [
+    ["Peyton", "Jordan", "Randy"],
+    ["Randy", "Peyton", "Jordan"],
+    ["Jordan", "Randy", "Peyton"]
+  ];
+
+  // Helper function to get the correct rotation
+  const getRotation = (week) => {
+    if (isRemotePeriod) {
+      // Use 3-week rotation for onsite roles + Willis in Remote
+      const newRotation = remoteRotations[(week - 1) % 3];
+      return {
+        "Threat Hunter": newRotation[0],
+        "Threat Hunter PT2": newRotation[1],
+        "Tech Desk": newRotation[2],
+        "Remote": "Willis" // Always Willis in the remote window
+      };
+    } else {
+      // Use original 4-week rotation
+      const rotation = standardRotations[(week - 1) % 4];
+      return {
+        "Threat Hunter": rotation[0],
+        "Threat Hunter PT2": rotation[1],
+        "Tech Desk": rotation[2],
+        "Threat Intel (WFH Week)": rotation[3]
+      };
+    }
+  };
+
   const rotation = getRotation(currentWeekNumber);
 
-  // Create role assignments
-  const roleAssignments = [
-    { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
-    { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
-    { role: "Tech Desk", employee: rotation["Tech Desk"] },
-    { role: "Threat Intel (WFH Week)", employee: rotation["Threat Intel (WFH Week)"] }
-  ];
+  // Create role assignments dynamically, respecting whether we are in the remote period
+  const roleAssignments = isRemotePeriod
+    ? [
+        { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
+        { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
+        { role: "Tech Desk", employee: rotation["Tech Desk"] },
+        { role: "Remote", employee: rotation["Remote"] }
+      ]
+    : [
+        { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
+        { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
+        { role: "Tech Desk", employee: rotation["Tech Desk"] },
+        { role: "Threat Intel (WFH Week)", employee: rotation["Threat Intel (WFH Week)"] }
+      ];
 
   return (
     <DashboardContainer>
