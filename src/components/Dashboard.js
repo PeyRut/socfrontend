@@ -16,38 +16,35 @@ const DashboardContainer = styled.div`
   min-height: 100vh;
 `;
 
-/* 
-   This ensures both columns (LeftSection, RightSection) 
-   fill the same height (top to bottom). 
-*/
 const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: row;
-  align-items: stretch; 
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
+  align-items: stretch;
 `;
 
 const LeftSection = styled.div`
   flex: 3;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   width: 100%;
-  /* Removed align-items: center; so top content lines up at the top */
 `;
 
 const RightSection = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
-  align-items: stretch; 
-  margin-left: 20px; 
+  align-items: stretch;
+  padding: 0;
+  margin-left: 20px;
   border-left: none;
   height: 100%;
+
   @media (max-width: 1200px) {
     display: none;
   }
@@ -61,6 +58,11 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
+/* 
+   This container holds the navigation buttons and date range.
+   We set a max-width that roughly matches the width of the
+   role cards, and center it to keep everything aligned.
+*/
 const WeekSelectorContainer = styled.div`
   width: 100%;
   max-width: 750px; 
@@ -83,6 +85,7 @@ const WeekButton = styled.button`
   border-radius: 6px;
   font-size: 1em;
   cursor: pointer;
+
   &:hover {
     background: var(--hover-accent);
   }
