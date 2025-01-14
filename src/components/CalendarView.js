@@ -20,38 +20,37 @@ const HolidayLabel = styled.div`
 `;
 
 const CalendarContainer = styled.div`
-  /* Inherit global dark background */
   color: var(--text-color);
-  padding: 10px; /* Reduced padding */
+  padding: 10px;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center the calendar vertically */
+  justify-content: center;
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px; /* Slightly reduced margin */
+  margin-bottom: 15px;
   width: 100%;
-  max-width: 1600px; /* Increased max-width for wider calendar */
+  max-width: 1600px;
 `;
 
 const Title = styled.h2`
-  font-size: 2.3em; /* Slightly reduced font size */
+  font-size: 2.3em;
   margin: 0;
 `;
 
 const BackButton = styled(Link)`
   background: var(--accent-color);
   color: var(--button-text-color);
-  padding: 10px 20px; /* Reduced padding */
-  border-radius: 6px; /* Reduced border-radius */
+  padding: 10px 20px;
+  border-radius: 6px;
   text-decoration: none;
-  font-size: 0.95em; /* Slightly reduced font size */
+  font-size: 0.95em;
 
   &:hover {
     background: var(--hover-accent);
@@ -61,31 +60,31 @@ const BackButton = styled(Link)`
 const CalendarGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px; /* Reduced gap */
+  gap: 8px;
   width: 100%;
-  max-width: 1600px; /* Increased max-width to match Header */
+  max-width: 1600px;
 `;
 
 const DayName = styled.div`
   font-weight: bold;
   text-align: center;
-  padding: 10px 0; /* Reduced padding */
+  padding: 10px 0;
   background: var(--secondary-background);
   border-radius: 4px;
-  font-size: 1em; /* Slightly reduced font size */
+  font-size: 1em;
 `;
 
 const DateCell = styled.div`
   background: var(--card-background);
-  padding: 10px; /* Reduced padding */
-  min-height: 120px; /* Reduced min-height for smaller height */
+  padding: 10px;
+  min-height: 120px;
   border-radius: 4px;
   position: relative;
   color: var(--text-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-size: 0.9em; /* Slightly reduced font size */
+  font-size: 0.9em;
 `;
 
 const RoleList = styled.div`
@@ -93,12 +92,69 @@ const RoleList = styled.div`
 `;
 
 const RoleItem = styled.div`
-  font-size: 0.85em; /* Slightly reduced font size */
+  font-size: 0.85em;
   color: var(--role-text-color);
 `;
 
+/** -- CHANGES BEGIN HERE -- **/
+
+// Remote start/end dates for Willis
+const remoteStart = moment("2025-01-27", "YYYY-MM-DD");
+const remoteEnd = moment("2025-04-14", "YYYY-MM-DD");
+
+// ORIGINAL (4-week) rotation logic
+const standardRotations = [
+  ["Willis", "Jordan", "Randy", "Peyton"],
+  ["Peyton", "Willis", "Jordan", "Randy"],
+  ["Randy", "Peyton", "Willis", "Jordan"],
+  ["Jordan", "Randy", "Peyton", "Willis"]
+];
+
+// NEW (3-week) rotation logic while Willis is remote
+// Week 1: Peyton (TH) / Jordan (TH PT2) / Randy (Tech Desk)
+// Week 2: Randy (TH) / Peyton (TH PT2) / Jordan (Tech Desk)
+// Week 3: Jordan (TH) / Randy (TH PT2) / Peyton (Tech Desk)
+const remoteRotations = [
+  ["Peyton", "Jordan", "Randy"],
+  ["Randy", "Peyton", "Jordan"],
+  ["Jordan", "Randy", "Peyton"]
+];
+
+/**
+ * getRotation: Returns role assignments based on the date.
+ */
+const getRotationForDate = (date) => {
+  // Check if date is within the remote window (inclusive)
+  const isRemotePeriod = date.isSameOrAfter(remoteStart, 'day') && date.isSameOrBefore(remoteEnd, 'day');
+  const weekNumber = date.isoWeek();
+
+  if (isRemotePeriod) {
+    // Use 3-week rotation for on-site roles + Willis as "Remote"
+    const r = remoteRotations[(weekNumber - 1) % 3];
+    return {
+      "Threat Hunter": r[0],
+      "Threat Hunter PT2": r[1],
+      "Tech Desk": r[2],
+      "Remote": "Willis"
+    };
+  } else {
+    // Use original 4-week rotation
+    const s = standardRotations[(weekNumber - 1) % 4];
+    return {
+      "Threat Hunter": s[0],
+      "Threat Hunter PT2": s[1],
+      "Tech Desk": s[2],
+      "Threat Intel (WFH Week)": s[3]
+    };
+  }
+};
+
+/** -- CHANGES END HERE -- **/
+
 const CalendarView = () => {
   const [currentMonth, setCurrentMonth] = useState(moment());
+
+  // Company holidays
   const company_holidays = {
     "01-01": "New Year's Day",
     "01-15": "Martin Luther King Jr. Day",
@@ -114,38 +170,23 @@ const CalendarView = () => {
     "12-31": "New Year's Eve"
   };
 
-  const getRotation = (week) => {
-    const rotations = [
-      ["Willis", "Jordan", "Randy", "Peyton"],
-      ["Peyton", "Willis", "Jordan", "Randy"],
-      ["Randy", "Peyton", "Willis", "Jordan"],
-      ["Jordan", "Randy", "Peyton", "Willis"]
-    ];
-    const rotation = rotations[(week - 1) % 4];
-    return {
-      "Threat Hunter": rotation[0],
-      "Threat Hunter PT2": rotation[1],
-      "Tech Desk": rotation[2],
-      "Threat Intel (WFH Week)": rotation[3]
-    };
-  };
-
   const generateCalendar = () => {
     const startOfMonth = currentMonth.clone().startOf('month');
     const startDay = startOfMonth.day(); // 0 (Sunday) - 6 (Saturday)
     const totalDays = currentMonth.daysInMonth();
 
-    // Adjusting to start the week on Monday
+    // Adjust to start the week on Monday
     const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
 
     const weeks = [];
     let week = [];
 
-    // Fill empty cells for days before the first of the month
+    // Fill empty cells before the first of the month
     for (let i = 0; i < adjustedStartDay; i++) {
       week.push(null);
     }
 
+    // Fill actual dates of the month
     for (let day = 1; day <= totalDays; day++) {
       week.push(day);
       if (week.length === 7) {
@@ -154,7 +195,7 @@ const CalendarView = () => {
       }
     }
 
-    // Fill the remaining cells of the last week
+    // Fill remaining cells in the last row
     if (week.length > 0) {
       while (week.length < 7) {
         week.push(null);
@@ -185,20 +226,24 @@ const CalendarView = () => {
         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
           <DayName key={index}>{day}</DayName>
         ))}
-        {weeks.map((week, weekIndex) => (
+
+        {weeks.map((week, weekIndex) =>
           week.map((day, dayIndex) => {
             if (day === null) {
               return <DateCell key={`${weekIndex}-${dayIndex}`} />;
             } else {
               const date = moment(currentMonth).date(day);
-              const weekNumber = date.isoWeek();
               const dateKey = date.format('MM-DD');
               const holiday = company_holidays[dateKey];
-              const rotation = getRotation(weekNumber);
+
+              // Get the rotation for this particular day
+              const rotation = getRotationForDate(date);
 
               return (
                 <DateCell key={`${weekIndex}-${dayIndex}`}>
-                  <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{day}</div>
+                  <div style={{ fontSize: '1.2em', fontWeight: 'bold' }}>
+                    {day}
+                  </div>
                   {/* Display roles */}
                   <RoleList>
                     {Object.entries(rotation).map(([role, employee], idx) => (
@@ -213,11 +258,24 @@ const CalendarView = () => {
               );
             }
           })
-        ))}
+        )}
       </CalendarGrid>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', width: '100%', maxWidth: '1600px' }}>
-        <button onClick={handlePrevMonth} style={buttonStyle}>Previous Month</button>
-        <button onClick={handleNextMonth} style={buttonStyle}>Next Month</button>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '20px',
+          width: '100%',
+          maxWidth: '1600px',
+        }}
+      >
+        <button onClick={handlePrevMonth} style={buttonStyle}>
+          Previous Month
+        </button>
+        <button onClick={handleNextMonth} style={buttonStyle}>
+          Next Month
+        </button>
       </div>
     </CalendarContainer>
   );
@@ -225,13 +283,13 @@ const CalendarView = () => {
 
 // Button styling
 const buttonStyle = {
-  padding: '12px 24px', // Increased padding
+  padding: '12px 24px',
   backgroundColor: 'var(--accent-color)',
   color: 'var(--button-text-color)',
   border: 'none',
-  borderRadius: '8px', // Increased border-radius
+  borderRadius: '8px',
   cursor: 'pointer',
-  fontSize: '1em' // Increased font size
+  fontSize: '1em',
 };
 
 export default CalendarView;
