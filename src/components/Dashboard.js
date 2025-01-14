@@ -35,13 +35,20 @@ const LeftSection = styled.div`
   width: 100%;
 `;
 
+/* UPDATED: Align news widget more centrally */
 const RightSection = styled.div`
-  flex: 1;
+  /* Instead of flex: 1, we can fix a width or set a max-width */
+  /* flex: 1;  <-- remove or comment out */
+
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;   /* centers its content horizontally */
+  justify-content: flex-start;
+  max-width: 400px;      /* pick any width that matches your design */
+  width: 100%;           
   padding: 0;
-  margin-left: 20px;
+  margin-left: auto;     /* center horizontally (left & right auto) */
+  margin-right: auto;
   border-left: none;
   height: 100%;
 
@@ -58,14 +65,9 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
-/* 
-   This container holds the navigation buttons and date range.
-   We set a max-width that roughly matches the width of the
-   role cards, and center it to keep everything aligned.
-*/
 const WeekSelectorContainer = styled.div`
   width: 100%;
-  max-width: 750px; 
+  max-width: 750px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -250,6 +252,7 @@ const Dashboard = () => {
           </RolesSection>
           <WeatherOverview />
         </LeftSection>
+
         <RightSection>
           <CyberSecurityNews />
         </RightSection>
