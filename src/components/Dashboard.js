@@ -48,12 +48,8 @@ const RightSection = styled.div`
   align-items: stretch; /* Stretch to fill the container */
   padding: 0; /* Remove padding to align flush against the right edge */
   margin-left: 20px; /* Space between LeftSection and RightSection */
-
-  /* Remove the border-left to eliminate the white border */
-  border-left: none;
-
-  /* Ensure the News widget matches the height of the Weather Forecast */
-  height: 100%; /* Fill the available height */
+  border-left: none; /* Remove the border-left to eliminate the white border */
+  height: 100%; /* Ensure the News widget matches the height of the Weather Forecast */
 
   @media (max-width: 1200px) {
     display: none; /* Hide on smaller screens or adjust as needed */
@@ -79,7 +75,9 @@ const Dashboard = () => {
   const currentWeekNumber = currentDate.isoWeek();
 
   // Check if current date is within the remote window
-  const isRemotePeriod = currentDate.isSameOrAfter(remoteStart, 'day') && currentDate.isBefore(remoteEnd, 'day');
+  const isRemotePeriod =
+    currentDate.isSameOrAfter(remoteStart, 'day') &&
+    currentDate.isBefore(remoteEnd, 'day');
 
   // ORIGINAL (4-week) rotation logic
   const standardRotations = [
@@ -102,16 +100,22 @@ const Dashboard = () => {
   // Helper function to get the correct rotation
   const getRotation = (week) => {
     if (isRemotePeriod) {
-      // Use 3-week rotation for onsite roles + Willis in Remote
-      const newRotation = remoteRotations[(week - 1) % 3];
+      // Force the first remote week to begin Monday, Jan 27, 2025
+      const weeksSinceStart = currentDate
+        .clone()
+        .startOf('isoWeek')
+        .diff(remoteStart.clone().startOf('isoWeek'), 'weeks');
+      const index = weeksSinceStart % 3;
+      const newRotation = remoteRotations[index];
+
       return {
         "Threat Hunter": newRotation[0],
         "Threat Hunter PT2": newRotation[1],
         "Tech Desk": newRotation[2],
-        "Remote": "Willis" // Always Willis in the remote window
+        "Remote": "Willis"
       };
     } else {
-      // Use original 4-week rotation
+      // Use original 4-week rotation outside remote window
       const rotation = standardRotations[(week - 1) % 4];
       return {
         "Threat Hunter": rotation[0],
@@ -157,7 +161,7 @@ const Dashboard = () => {
           <WeatherOverview />
         </LeftSection>
         <RightSection>
-          <CyberSecurityNews /> {/* Add the news widget here */}
+          <CyberSecurityNews />
         </RightSection>
       </MainContent>
       <Footer />
