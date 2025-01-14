@@ -16,42 +16,38 @@ const DashboardContainer = styled.div`
   min-height: 100vh;
 `;
 
+/* 
+   This ensures both columns (LeftSection, RightSection) 
+   fill the same height (top to bottom). 
+*/
 const MainContent = styled.main`
   flex: 1;
   display: flex;
   flex-direction: row;
+  align-items: stretch; 
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
-  align-items: stretch;
 `;
 
 const LeftSection = styled.div`
   flex: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
   width: 100%;
+  /* Removed align-items: center; so top content lines up at the top */
 `;
 
-/* UPDATED: Align news widget more centrally */
 const RightSection = styled.div`
-  /* Instead of flex: 1, we can fix a width or set a max-width */
-  /* flex: 1;  <-- remove or comment out */
-
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;   /* centers its content horizontally */
-  justify-content: flex-start;
-  max-width: 400px;      /* pick any width that matches your design */
-  width: 100%;           
-  padding: 0;
-  margin-left: auto;     /* center horizontally (left & right auto) */
-  margin-right: auto;
+  justify-content: flex-start; 
+  align-items: stretch; 
+  margin-left: 20px; 
   border-left: none;
   height: 100%;
-
   @media (max-width: 1200px) {
     display: none;
   }
@@ -67,7 +63,7 @@ const RolesSection = styled.section`
 
 const WeekSelectorContainer = styled.div`
   width: 100%;
-  max-width: 750px;
+  max-width: 750px; 
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -87,7 +83,6 @@ const WeekButton = styled.button`
   border-radius: 6px;
   font-size: 1em;
   cursor: pointer;
-
   &:hover {
     background: var(--hover-accent);
   }
@@ -252,7 +247,6 @@ const Dashboard = () => {
           </RolesSection>
           <WeatherOverview />
         </LeftSection>
-
         <RightSection>
           <CyberSecurityNews />
         </RightSection>
