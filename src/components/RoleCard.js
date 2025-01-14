@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { GrDocumentThreat } from 'react-icons/gr';
 import { FaTools } from 'react-icons/fa';
 import { SiGooglebigquery } from 'react-icons/si';
+import { FaGlobeAfrica } from "react-icons/fa";
 
 const Card = styled.div`
   background: var(--card-background);
