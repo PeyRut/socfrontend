@@ -1,6 +1,6 @@
 // src/components/Dashboard.js
 
-import React from 'react';
+import React, { useState } from 'react';               // <-- NEW: import useState
 import styled from 'styled-components';
 import moment from 'moment';
 import Navbar from './Navbar';
@@ -65,6 +65,29 @@ const RolesSection = styled.section`
   width: 100%;
 `;
 
+// NEW: A small container to hold the week-selector buttons.
+const WeekSelector = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+`;
+
+// NEW: Some quick styling for the "Previous Week"/"Next Week" buttons.
+const WeekButton = styled.button`
+  background: var(--accent-color);
+  color: var(--button-text-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--hover-accent);
+  }
+`;
+
 const Dashboard = () => {
   // Define remote start/end dates for Willis
   const remoteStart = moment("2025-01-27", "YYYY-MM-DD");
@@ -126,15 +149,80 @@ const Dashboard = () => {
     }
   };
 
-  const rotation = getRotation(currentWeekNumber);
+  // ----------------------------------------------------------------------
+  //  KEEPING existing code above. Now let's add "week selector" logic below
+  // ----------------------------------------------------------------------
 
-  // Create role assignments dynamically, respecting whether we are in the remote period
+  // NEW: Track the user’s selected ISO week in state.
+  const [selectedWeek, setSelectedWeek] = useState(currentWeekNumber);
+
+  // NEW: We'll compute a date object representing that selectedWeek.
+  //      This is how we handle the "remote" window logic for ANY week.
+  const displayedDate = moment().isoWeek(selectedWeek);
+
+  // NEW: Check if THAT date is in the remote period
+  const displayedIsRemotePeriod =
+    displayedDate.isSameOrAfter(remoteStart, 'day') &&
+    displayedDate.isBefore(remoteEnd, 'day');
+
+  // NEW: We use displayedDate for the rotation, not currentDate
+  const getDisplayedRotation = (date) => {
+    if (displayedIsRemotePeriod) {
+      const weeksSinceStart = date
+        .clone()
+        .startOf('isoWeek')
+        .diff(remoteStart.clone().startOf('isoWeek'), 'weeks');
+      const index = weeksSinceStart % 3;
+      const newRotation = remoteRotations[index];
+
+      return {
+        "Threat Hunter": newRotation[0],
+        "Threat Hunter PT2": newRotation[1],
+        "Tech Desk": newRotation[2],
+        "Remote": "Willis"
+      };
+    } else {
+      // For any non-remote date, figure out the correct 4-week rotation
+      const weekNum = date.isoWeek();
+      const rotation = standardRotations[(weekNum - 1) % 4];
+      return {
+        "Threat Hunter": rotation[0],
+        "Threat Hunter PT2": rotation[1],
+        "Tech Desk": rotation[2],
+        "Threat Intel (WFH Week)": rotation[3]
+      };
+    }
+  };
+
+  // NEW: This is our "actual" rotation for the selected week
+  const displayedRotation = getDisplayedRotation(displayedDate);
+
+  // NEW: Build role assignments for the selected week
+  const displayedRoleAssignments = displayedIsRemotePeriod
+    ? [
+        { role: "Threat Hunter", employee: displayedRotation["Threat Hunter"] },
+        { role: "Threat Hunter PT2", employee: displayedRotation["Threat Hunter PT2"] },
+        { role: "Tech Desk", employee: displayedRotation["Tech Desk"] },
+        { role: "Remote", employee: displayedRotation["Remote"] },
+      ]
+    : [
+        { role: "Threat Hunter", employee: displayedRotation["Threat Hunter"] },
+        { role: "Threat Hunter PT2", employee: displayedRotation["Threat Hunter PT2"] },
+        { role: "Tech Desk", employee: displayedRotation["Tech Desk"] },
+        { role: "Threat Intel (WFH Week)", employee: displayedRotation["Threat Intel (WFH Week)"] }
+      ];
+
+  // ------------------------------------------------------------------------
+  //  The lines below are your ORIGINAL code for the "current" week rotation.
+  //  We are NOT removing it, as requested. We simply won't use it in the UI.
+  // ------------------------------------------------------------------------
+  const rotation = getRotation(currentWeekNumber);
   const roleAssignments = isRemotePeriod
     ? [
         { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
         { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
         { role: "Tech Desk", employee: rotation["Tech Desk"] },
-        { role: "Remote", employee: rotation["Remote"] }
+        { role: "Remote", employee: rotation["Remote"] },
       ]
     : [
         { role: "Threat Hunter", employee: rotation["Threat Hunter"] },
@@ -143,14 +231,30 @@ const Dashboard = () => {
         { role: "Threat Intel (WFH Week)", employee: rotation["Threat Intel (WFH Week)"] }
       ];
 
+  // NEW: Handlers for the "Previous Week" / "Next Week" buttons
+  const handlePrevWeek = () => {
+    setSelectedWeek((prev) => prev - 1);
+  };
+
+  const handleNextWeek = () => {
+    setSelectedWeek((prev) => prev + 1);
+  };
+
   return (
     <DashboardContainer>
       <Navbar />
       <Header />
       <MainContent>
         <LeftSection>
+          {/* NEW: Render our week selector above the RolesSection */}
+          <WeekSelector>
+            <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
+            <WeekButton onClick={handleNextWeek}>Next Week</WeekButton>
+          </WeekSelector>
+
+          {/* NEW: Instead of roleAssignments, we render displayedRoleAssignments */}
           <RolesSection>
-            {roleAssignments.map((assignment, index) => (
+            {displayedRoleAssignments.map((assignment, index) => (
               <RoleCard
                 key={index}
                 role={assignment.role}
@@ -158,6 +262,7 @@ const Dashboard = () => {
               />
             ))}
           </RolesSection>
+
           <WeatherOverview />
         </LeftSection>
         <RightSection>
