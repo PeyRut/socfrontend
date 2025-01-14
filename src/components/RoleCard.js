@@ -50,8 +50,7 @@ const RoleCard = ({ role, employee }) => {
     "Threat Hunter PT2": <SiGooglebigquery />,
     "Tech Desk": <FaTools />,
     "Threat Intel (WFH Week)": <GrDocumentThreat />,
-    // Blank icon for "Remote" role
-    "Remote": null
+    "Remote": <FaGlobeAfrica />
   };
 
   return (
