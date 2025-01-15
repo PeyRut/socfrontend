@@ -107,8 +107,8 @@ const WeekButton = styled.button`
 */
 const WeekRangeText = styled.span`
   position: absolute;
-  right: 200px; // put it on the right side
-  top: 0px;   // adjust vertical offset
+  right: 400px; // put it on the right side
+  top: 50px;   // adjust vertical offset
   font-size: 1.1em;
   color: var(--accent-color);
   font-weight: 600;
