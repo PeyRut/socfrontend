@@ -60,20 +60,24 @@ const RolesSection = styled.section`
 `;
 
 /* 
-   This container holds the navigation buttons and date range.
-   We set a max-width that roughly matches the width of the
-   role cards, and center it to keep everything aligned.
+  This container is now positioned relative
+  so you can absolutely position the two elements inside it.
 */
 const WeekSelectorContainer = styled.div`
+  position: relative;
   width: 100%;
   max-width: 750px; 
+  height: 80px;      // Give it some fixed height so child absolute positioning is easier
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-color: #f9f9f9; // Just an example so you can see the container
 `;
 
 const ButtonGroup = styled.div`
+  position: absolute;
+  /* Adjust these values to move the buttons around. */
+  left: 50px;    // Change this to whatever horizontal offset you like
+  top: 20px;     // Change this to whatever vertical offset you like
+
   display: flex;
   gap: 10px;
 `;
@@ -92,7 +96,14 @@ const WeekButton = styled.button`
   }
 `;
 
+/*
+  The date range text is also absolutely positioned.
+  Change left/right/top to place it independently from the buttons.
+*/
 const WeekRangeText = styled.span`
+  position: absolute;
+  left: 300px;   // Adjust this to shift the date range horizontally
+  top: 25px;     // Adjust this to shift it vertically
   font-size: 1.1em;
   color: var(--accent-color);
   font-weight: 600;
@@ -190,10 +201,14 @@ const Dashboard = () => {
         { role: "Threat Hunter", employee: displayedRotation["Threat Hunter"] },
         { role: "Threat Hunter PT2", employee: displayedRotation["Threat Hunter PT2"] },
         { role: "Tech Desk", employee: displayedRotation["Tech Desk"] },
-        { role: "Threat Intel (WFH Week)", employee: displayedRotation["Threat Intel (WFH Week)"] },
+        {
+          role: "Threat Intel (WFH Week)",
+          employee: displayedRotation["Threat Intel (WFH Week)"],
+        },
       ];
 
-  /* eslint-disable no-unused-vars */
+  // This "rotation" and "roleAssignments" was your original code for the current week,
+  // but you’re primarily displaying "displayedRoleAssignments" now.
   const rotation = getRotation(currentWeekNumber);
   const roleAssignments = isRemotePeriod
     ? [
@@ -211,7 +226,6 @@ const Dashboard = () => {
           employee: rotation["Threat Intel (WFH Week)"],
         },
       ];
-  /* eslint-enable no-unused-vars */
 
   const handlePrevWeek = () => {
     setSelectedWeek((prev) => prev - 1);
@@ -221,6 +235,7 @@ const Dashboard = () => {
     setSelectedWeek((prev) => prev + 1);
   };
 
+  // Build the display text for the selected week
   const displayedWeekStart = displayedDate
     .clone()
     .startOf("isoWeek")
@@ -237,20 +252,30 @@ const Dashboard = () => {
       <Header />
       <MainContent>
         <LeftSection>
+          {/* Container for the buttons and date range */}
           <WeekSelectorContainer>
+            {/* Buttons on the left (absolutely positioned) */}
             <ButtonGroup>
               <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
               <WeekButton onClick={handleNextWeek}>Next Week</WeekButton>
             </ButtonGroup>
+
+            {/* Date range text on the right (absolutely positioned) */}
             <WeekRangeText>{displayedWeekLabel}</WeekRangeText>
           </WeekSelectorContainer>
+
           <RolesSection>
             {displayedRoleAssignments.map((assignment, index) => (
-              <RoleCard key={index} role={assignment.role} employee={assignment.employee} />
+              <RoleCard
+                key={index}
+                role={assignment.role}
+                employee={assignment.employee}
+              />
             ))}
           </RolesSection>
           <WeatherOverview />
         </LeftSection>
+
         <RightSection>
           <CyberSecurityNews />
         </RightSection>
