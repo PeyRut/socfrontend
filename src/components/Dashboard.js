@@ -80,7 +80,7 @@ const WeekSelectorContainer = styled.div`
 */
 const ButtonGroup = styled.div`
   position: absolute;
-  left: -200px;  // Adjust horizontally
+  left: -195px;  // Adjust horizontally
   top: 30px;   // Adjust vertically
 
   display: flex;
