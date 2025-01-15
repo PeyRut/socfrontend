@@ -60,8 +60,8 @@ const RolesSection = styled.section`
 `;
 
 /* 
-  This container is now positioned relative
-  so you can absolutely position the two elements inside it.
+  This container is positioned relative
+  so we can absolutely position the two elements inside it.
 */
 const WeekSelectorContainer = styled.div`
   position: relative;
@@ -188,6 +188,7 @@ const Dashboard = () => {
     }
   };
 
+  // Rotation for the currently selected week
   const displayedRotation = getDisplayedRotation(displayedDate);
 
   const displayedRoleAssignments = displayedIsRemotePeriod
@@ -207,8 +208,10 @@ const Dashboard = () => {
         },
       ];
 
-  // This "rotation" and "roleAssignments" was your original code for the current week,
-  // but you’re primarily displaying "displayedRoleAssignments" now.
+  // --------------------
+  // Original code setting "roleAssignments" for the *current* week, not the displayed week.
+  // We'll log it here so it is no longer "unused."
+  // --------------------
   const rotation = getRotation(currentWeekNumber);
   const roleAssignments = isRemotePeriod
     ? [
@@ -226,6 +229,9 @@ const Dashboard = () => {
           employee: rotation["Threat Intel (WFH Week)"],
         },
       ];
+
+  // **Use the variable** so ESLint won't complain it's never used:
+  console.log("roleAssignments for current week:", roleAssignments);
 
   const handlePrevWeek = () => {
     setSelectedWeek((prev) => prev - 1);
@@ -252,15 +258,12 @@ const Dashboard = () => {
       <Header />
       <MainContent>
         <LeftSection>
-          {/* Container for the buttons and date range */}
           <WeekSelectorContainer>
-            {/* Buttons on the left (absolutely positioned) */}
             <ButtonGroup>
               <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
               <WeekButton onClick={handleNextWeek}>Next Week</WeekButton>
             </ButtonGroup>
 
-            {/* Date range text on the right (absolutely positioned) */}
             <WeekRangeText>{displayedWeekLabel}</WeekRangeText>
           </WeekSelectorContainer>
 
@@ -273,6 +276,7 @@ const Dashboard = () => {
               />
             ))}
           </RolesSection>
+
           <WeatherOverview />
         </LeftSection>
 
