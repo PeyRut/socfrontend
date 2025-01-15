@@ -60,23 +60,28 @@ const RolesSection = styled.section`
 `;
 
 /* 
-  This container is positioned relative
-  so we can absolutely position the two elements inside it.
+  Updated so it won’t be white or push the other elements too far.
+  We use position: relative for absolute positioning of children.
+  - min-height: ensures there’s space for the absolutely positioned elements 
+  - padding-top: also helps keep them from overlapping above the container
 */
 const WeekSelectorContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 750px; 
-  height: 80px;      // Give it some fixed height so child absolute positioning is easier
+  max-width: 750px;
   margin: 0 auto;
-  background-color: #f9f9f9; // Just an example so you can see the container
+  background-color: transparent; 
+  min-height: 60px;       // Enough space for your buttons/text
+  padding-top: 10px;      // Slight padding so absolute items aren’t clipped at the top
 `;
 
+/*
+  Absolutely position your button group so you can tweak left/top easily.
+*/
 const ButtonGroup = styled.div`
   position: absolute;
-  /* Adjust these values to move the buttons around. */
-  left: 50px;    // Change this to whatever horizontal offset you like
-  top: 20px;     // Change this to whatever vertical offset you like
+  left: 20px;  // Adjust horizontally
+  top: 10px;   // Adjust vertically
 
   display: flex;
   gap: 10px;
@@ -97,13 +102,13 @@ const WeekButton = styled.button`
 `;
 
 /*
-  The date range text is also absolutely positioned.
-  Change left/right/top to place it independently from the buttons.
+  Absolutely position your date text in a different spot.
+  You can switch left/right, or tweak top/bottom as you like.
 */
 const WeekRangeText = styled.span`
   position: absolute;
-  left: 300px;   // Adjust this to shift the date range horizontally
-  top: 25px;     // Adjust this to shift it vertically
+  right: 20px; // put it on the right side
+  top: 15px;   // adjust vertical offset
   font-size: 1.1em;
   color: var(--accent-color);
   font-weight: 600;
@@ -208,10 +213,7 @@ const Dashboard = () => {
         },
       ];
 
-  // --------------------
-  // Original code setting "roleAssignments" for the *current* week, not the displayed week.
-  // We'll log it here so it is no longer "unused."
-  // --------------------
+  // Original code for the current week’s rotation, with a console.log so ESLint doesn’t complain
   const rotation = getRotation(currentWeekNumber);
   const roleAssignments = isRemotePeriod
     ? [
@@ -229,8 +231,6 @@ const Dashboard = () => {
           employee: rotation["Threat Intel (WFH Week)"],
         },
       ];
-
-  // **Use the variable** so ESLint won't complain it's never used:
   console.log("roleAssignments for current week:", roleAssignments);
 
   const handlePrevWeek = () => {
@@ -258,6 +258,7 @@ const Dashboard = () => {
       <Header />
       <MainContent>
         <LeftSection>
+          {/* Container for the buttons and date range */}
           <WeekSelectorContainer>
             <ButtonGroup>
               <WeekButton onClick={handlePrevWeek}>Previous Week</WeekButton>
