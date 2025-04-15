@@ -152,7 +152,7 @@ const getRotationForDate = (date) => {
       'Threat Hunter': s[0],
       'Threat Hunter PT2': s[1],
       'Tech Desk': s[2],
-      'Threat Intel (WFH Week)': s[3]
+      'Threat Intel': s[3]
     };
   }
 };
