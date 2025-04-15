@@ -156,7 +156,7 @@ const Dashboard = () => {
         "Threat Hunter": rotation[0],
         "Threat Hunter PT2": rotation[1],
         "Tech Desk": rotation[2],
-        "Threat Intel (WFH Week)": rotation[3],
+        "Threat Intel": rotation[3],
       };
     }
   };
@@ -188,7 +188,7 @@ const Dashboard = () => {
         "Threat Hunter": rotation[0],
         "Threat Hunter PT2": rotation[1],
         "Tech Desk": rotation[2],
-        "Threat Intel (WFH Week)": rotation[3],
+        "Threat Intel": rotation[3],
       };
     }
   };
@@ -208,7 +208,7 @@ const Dashboard = () => {
         { role: "Threat Hunter PT2", employee: displayedRotation["Threat Hunter PT2"] },
         { role: "Tech Desk", employee: displayedRotation["Tech Desk"] },
         {
-          role: "Threat Intel (WFH Week)",
+          role: "Threat Intel",
           employee: displayedRotation["Threat Intel (WFH Week)"],
         },
       ];
@@ -227,8 +227,8 @@ const Dashboard = () => {
         { role: "Threat Hunter PT2", employee: rotation["Threat Hunter PT2"] },
         { role: "Tech Desk", employee: rotation["Tech Desk"] },
         {
-          role: "Threat Intel (WFH Week)",
-          employee: rotation["Threat Intel (WFH Week)"],
+          role: "Threat Intel",
+          employee: rotation["Threat Intel"],
         },
       ];
   console.log("roleAssignments for current week:", roleAssignments);
