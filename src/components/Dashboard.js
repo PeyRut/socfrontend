@@ -209,7 +209,7 @@ const Dashboard = () => {
         { role: "Tech Desk", employee: displayedRotation["Tech Desk"] },
         {
           role: "Threat Intel",
-          employee: displayedRotation["Threat Intel (WFH Week)"],
+          employee: displayedRotation["Threat Intel"],
         },
       ];
 
