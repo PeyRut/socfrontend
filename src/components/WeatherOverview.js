@@ -5,11 +5,9 @@ import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import moment from 'moment';
 
-// Import the SVG icons as React components
 import { ReactComponent as RaindropsIcon } from '../assets/weather-icons/raindrops.svg';
 import { ReactComponent as WindIcon } from '../assets/weather-icons/wind.svg';
 
-// All your original styled components remain exactly the same
 const OverviewContainer = styled.div`
   background: var(--secondary-background);
   color: var(--text-color);
@@ -117,38 +115,6 @@ const Spinner = styled.div`
   margin: 0 auto;
 `;
 
-// Your original weather code mapping remains exactly the same
-const weatherCodeMap = {
-  0: { description: 'Clear sky', icon: 'clear-day.svg' },
-  1: { description: 'Mainly clear', icon: 'clear-day.svg' },
-  2: { description: 'Partly cloudy', icon: 'partly-cloudy-day.svg' },
-  3: { description: 'Overcast', icon: 'cloudy.svg' },
-  45: { description: 'Fog', icon: 'fog.svg' },
-  48: { description: 'Depositing rime fog', icon: 'fog.svg' },
-  51: { description: 'Light drizzle', icon: 'drizzle.svg' },
-  53: { description: 'Moderate drizzle', icon: 'drizzle.svg' },
-  55: { description: 'Dense drizzle', icon: 'drizzle.svg' },
-  56: { description: 'Light freezing drizzle', icon: 'sleet.svg' },
-  57: { description: 'Dense freezing drizzle', icon: 'sleet.svg' },
-  61: { description: 'Slight rain', icon: 'rain.svg' },
-  63: { description: 'Moderate rain', icon: 'rain.svg' },
-  65: { description: 'Heavy rain', icon: 'rain.svg' },
-  66: { description: 'Light freezing rain', icon: 'sleet.svg' },
-  67: { description: 'Heavy freezing rain', icon: 'sleet.svg' },
-  71: { description: 'Slight snowfall', icon: 'snow.svg' },
-  73: { description: 'Moderate snowfall', icon: 'snow.svg' },
-  75: { description: 'Heavy snowfall', icon: 'snow.svg' },
-  77: { description: 'Snow grains', icon: 'snow.svg' },
-  80: { description: 'Slight rain showers', icon: 'rain.svg' },
-  81: { description: 'Moderate rain showers', icon: 'rain.svg' },
-  82: { description: 'Violent rain showers', icon: 'rain.svg' },
-  85: { description: 'Slight snow showers', icon: 'snow-showers.svg' },
-  86: { description: 'Heavy snow showers', icon: 'snow-showers.svg' },
-  95: { description: 'Thunderstorm', icon: 'thunderstorms.svg' },
-  96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorms-rain.svg' },
-  99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorms-rain.svg' },
-};
-
 const WeatherOverview = () => {
   const [forecast, setForecast] = useState([]);
   const [error, setError] = useState(null);
@@ -156,31 +122,23 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        // Create the URL with all parameters explicitly set
-        const url = new URL('https://api.open-meteo.com/v1/forecast');
-        url.search = new URLSearchParams({
-          latitude: '33.1032',
-          longitude: '-96.6706',
-          daily: 'temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max,wind_speed_10m_max',
-          timezone: 'America/Chicago',
-          wind_speed_unit: 'mph',
-          temperature_unit: 'fahrenheit'
-        }).toString();
+        const apiKey = '1ad2758f791944fbab3143417252207';
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=Allen,TX&days=7&aqi=no&alerts=no`;
 
-        const response = await axios.get(url.toString());
-        
-        if (!response.data || !response.data.daily || !response.data.daily.time) {
-          throw new Error('Invalid data structure in API response');
+        const response = await axios.get(url, { timeout: 10000 });
+
+        if (!response.data || !response.data.forecast?.forecastday) {
+          throw new Error('Invalid data structure in WeatherAPI response');
         }
 
-        const dailyData = response.data.daily;
-        const forecastData = dailyData.time.map((date, index) => ({
-          date,
-          maxTemp: dailyData.temperature_2m_max[index],
-          minTemp: dailyData.temperature_2m_min[index],
-          weatherCode: dailyData.weathercode[index],
-          precipitationProbability: dailyData.precipitation_probability_max[index],
-          windSpeed: dailyData.wind_speed_10m_max[index]
+        const forecastData = response.data.forecast.forecastday.map(day => ({
+          date: day.date,
+          maxTemp: day.day.maxtemp_f,
+          minTemp: day.day.mintemp_f,
+          precipitationProbability: day.day.daily_chance_of_rain,
+          windSpeed: day.day.maxwind_mph,
+          weatherDescription: day.day.condition.text,
+          weatherIconUrl: `https:${day.day.condition.icon}`
         }));
 
         setForecast(forecastData);
@@ -193,7 +151,6 @@ const WeatherOverview = () => {
     fetchForecast();
   }, []);
 
-  // Rest of your component remains exactly the same
   if (error) {
     return (
       <OverviewContainer>
@@ -218,49 +175,40 @@ const WeatherOverview = () => {
     <OverviewContainer>
       <OverviewHeader>7-Day Weather Forecast for Allen, TX</OverviewHeader>
       <ForecastGrid>
-        {forecast.map((day, index) => {
-          if (!day) return null;
-          const date = moment(day.date);
-          const weatherInfo = weatherCodeMap[day.weatherCode] || {
-            description: `Unknown weather code: ${day.weatherCode}`,
-            icon: 'unknown.svg',
-          };
-
-          return (
-            <ForecastCard key={index}>
-              <Day>{date.format('ddd, MMM D')}</Day>
-              <WeatherIconContainer>
-                <img
-                  src={require(`../assets/weather-icons/${weatherInfo.icon}`)}
-                  alt={weatherInfo.description}
-                  style={{ width: '64px', height: '64px' }}
-                />
-              </WeatherIconContainer>
-              <Temperature>
-                High: {day.maxTemp !== null ? `${Math.round(day.maxTemp)}°F` : 'N/A'}
-                <br />
-                Low: {day.minTemp !== null ? `${Math.round(day.minTemp)}°F` : 'N/A'}
-              </Temperature>
-              <InfoRow>
-                <InfoIcon>
-                  <RaindropsIcon aria-label="Precipitation" />
-                </InfoIcon>
-                {day.precipitationProbability !== null
-                  ? `${day.precipitationProbability}%`
-                  : 'N/A'}
-              </InfoRow>
-              <InfoRow>
-                <InfoIcon>
-                  <WindIcon aria-label="Wind Speed" />
-                </InfoIcon>
-                {day.windSpeed !== null
-                  ? `${Math.round(day.windSpeed)} mph`
-                  : 'N/A'}
-              </InfoRow>
-              <Description>{weatherInfo.description}</Description>
-            </ForecastCard>
-          );
-        })}
+        {forecast.map((day, index) => (
+          <ForecastCard key={index}>
+            <Day>{moment(day.date).format('ddd, MMM D')}</Day>
+            <WeatherIconContainer>
+              <img
+                src={day.weatherIconUrl}
+                alt={day.weatherDescription}
+                style={{ width: '64px', height: '64px' }}
+              />
+            </WeatherIconContainer>
+            <Temperature>
+              High: {Math.round(day.maxTemp)}°F
+              <br />
+              Low: {Math.round(day.minTemp)}°F
+            </Temperature>
+            <InfoRow>
+              <InfoIcon>
+                <RaindropsIcon aria-label="Precipitation" />
+              </InfoIcon>
+              {day.precipitationProbability !== null
+                ? `${day.precipitationProbability}%`
+                : 'N/A'}
+            </InfoRow>
+            <InfoRow>
+              <InfoIcon>
+                <WindIcon aria-label="Wind Speed" />
+              </InfoIcon>
+              {day.windSpeed !== null
+                ? `${Math.round(day.windSpeed)} mph`
+                : 'N/A'}
+            </InfoRow>
+            <Description>{day.weatherDescription}</Description>
+          </ForecastCard>
+        ))}
       </ForecastGrid>
     </OverviewContainer>
   );
