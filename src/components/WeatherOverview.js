@@ -122,7 +122,7 @@ const WeatherOverview = () => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        const apiKey = '1ad2758f791944fbab3143417252207';
+        const apiKey = '57c78a54c94d4993903180018250608';
         const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=Allen,TX&days=7&aqi=no&alerts=no`;
 
         const response = await axios.get(url, { timeout: 10000 });
